@@ -8,6 +8,7 @@ import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
 import com.team.creer_back.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 // jwt에서 아이디를 가져와 사용하기 위한 import
 import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GoodsService {
@@ -31,6 +33,26 @@ public class GoodsService {
         return goodsDetailDtos;
     }
 
+    // 굿즈 필터 조회
+    public  List<GoodsDetailDto>  selctGoodsCategory(String keyword) {
+        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
+        for(GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+        }
+        return goodsDetailDtos;
+
+    }
+    // 굿즈 제목 조회
+    public  List<GoodsDetailDto>  selctGoodsTitle(String keyword) {
+        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsTitleContaining(keyword);
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
+        for(GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+        }
+        return goodsDetailDtos;
+
+    }
     // 굿즈 한개 조회
     public GoodsDetailDto selrctGoods(Long id) {
             GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
@@ -45,7 +67,8 @@ public class GoodsService {
     public boolean insertGoods(GoodsDetailDto goodsDetailDto) {
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
-            Long memberId = Long.valueOf(4);
+            Long memberId = getCurrentMemberId();
+            log.warn("후후 : " + getCurrentMemberId());
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );

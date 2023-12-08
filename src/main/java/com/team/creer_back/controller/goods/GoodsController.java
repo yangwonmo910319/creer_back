@@ -29,20 +29,36 @@ public class GoodsController {
         GoodsDetailDto goodsDetailDto = goodsService.selrctGoods(id);
         return ResponseEntity.ok(goodsDetailDto);
     }
+
+    // 굿즈 테그 필터
+    @GetMapping("/listDetail/Category/{keyword}")
+    public ResponseEntity <List<GoodsDetailDto>>  selctGoodsCategory(@PathVariable  String keyword) {
+        List<GoodsDetailDto>list =  goodsService.selctGoodsCategory(keyword);
+
+        return ResponseEntity.ok(list);
+    }
+
+    // 굿즈 제목 필터
+    @GetMapping("/listDetail/Title/{keyword}")
+    public ResponseEntity <List<GoodsDetailDto>> selctGoodsTitle(@RequestParam String keyword) {
+        List<GoodsDetailDto>list = goodsService.selctGoodsTitle(keyword);
+        return ResponseEntity.ok(list);
+    }
+
         // 굿즈 등록
         @PostMapping("/new")
         public ResponseEntity<Boolean> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
             boolean  list = goodsService.insertGoods(goodsDetailDto);
             return ResponseEntity.ok(list);
         }
-        // 굿즈 수정
-        @PutMapping("/modify/{id}")
-        public ResponseEntity<Boolean> updateGoods(@PathVariable Long id, @RequestBody GoodsDetailDto goodsDetailDto) {
-            boolean isTrue = goodsService.updateGoods(id, goodsDetailDto);
-            return ResponseEntity.ok(isTrue);
-        }
 
 
+    // 굿즈 수정
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<Boolean> updateGoods(@PathVariable Long id, @RequestBody GoodsDetailDto goodsDetailDto) {
+        boolean isTrue = goodsService.updateGoods(id, goodsDetailDto);
+        return ResponseEntity.ok(isTrue);
+    }
 
 
 

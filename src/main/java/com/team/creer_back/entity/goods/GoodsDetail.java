@@ -23,13 +23,10 @@ public class GoodsDetail {
     private String goodsDesc;            // 상품 설명
     private String goodsRefund;         // 상품 배송/환불/교환 안내
     private String goodsTitle;          // 상품 이름
-
     @ManyToOne(fetch = FetchType.LAZY)  // 판매자 닉네임, 프사
     @JoinColumn(name = "member_id")
     private Member member;
-
     private String goodsPrice;          // 상품 가격
-
     private String goodsDeliveryFee;    // 배달비
 
 
