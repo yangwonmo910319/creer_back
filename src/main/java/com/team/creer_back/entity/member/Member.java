@@ -28,6 +28,8 @@ public class Member {
     private String nickName;
     @Column(unique = true)
     private String email;
+
+    @Lob
     private String image;
 
     @Enumerated(EnumType.STRING)

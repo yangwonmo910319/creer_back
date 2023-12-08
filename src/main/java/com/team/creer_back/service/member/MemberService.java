@@ -22,9 +22,9 @@ public class MemberService {
 
     // 회원 가입 여부 확인
     public boolean isMember(String email) {
-
         return memberRepository.existsByEmail(email);
     }
+
     // 회원 상세 조회
     public MemberResDto getMemberDetail(Long id) {
         Member member = memberRepository.findById(id).orElseThrow(
@@ -32,6 +32,7 @@ public class MemberService {
         );
         return convertEntityToDto(member);
     }
+
     // 회원 수정
     public boolean modifyMember(MemberReqDto memberDto) {
         try {
@@ -47,10 +48,11 @@ public class MemberService {
             return false;
         }
     }
+
     // 회원 삭제
     public boolean deleteMember(String email) {
         try {
-            Member member =memberRepository.findByEmail(email).orElseThrow(
+            Member member = memberRepository.findByEmail(email).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
             memberRepository.delete(member);
@@ -59,30 +61,34 @@ public class MemberService {
             return false; // 회원이 존재하지 않으면 false 반환
         }
     }
+
     // 회원 전체 조회
     public List<MemberResDto> getMemberList() {
         List<Member> members = memberRepository.findAll();
         List<MemberResDto> memberDtos = new ArrayList<>();
-        for(Member member : members) {
+        for (Member member : members) {
             memberDtos.add(convertEntityToDto(member));
         }
         return memberDtos;
     }
+
     // 총 페이지수
     public int getMemberPage(Pageable pageable) {
 
         return memberRepository.findAll(pageable).getTotalPages();
     }
+
     // 회원 조회 : 페이지 네이션
     public List<MemberResDto> getMemberList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<Member> members = memberRepository.findAll(pageable).getContent();
         List<MemberResDto> memberDtos = new ArrayList<>();
-        for(Member member : members) {
+        for (Member member : members) {
             memberDtos.add(convertEntityToDto(member));
         }
         return memberDtos;
     }
+
     // 회원 엔티티를 회원 DTO로 변환
     private MemberResDto convertEntityToDto(Member member) {
         MemberResDto memberDto = new MemberResDto();
@@ -90,5 +96,10 @@ public class MemberService {
         memberDto.setName(member.getName());
         memberDto.setImage(member.getImage());
         return memberDto;
+    }
+
+    // 별명 중복 확인
+    public boolean isNickName(String nickName) {
+        return memberRepository.existsByNickName(nickName);
     }
 }

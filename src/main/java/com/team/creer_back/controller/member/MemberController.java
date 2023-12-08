@@ -60,4 +60,12 @@ public class MemberController {
         boolean isTrue = memberService.deleteMember(email);
         return ResponseEntity.ok(isTrue);
     }
+
+    // 별명 중복 확인
+    @GetMapping("/signUp/nickName/{nickName}")
+    public ResponseEntity<Boolean> nickNameExists(@PathVariable String nickName) {
+        log.info("nickName : " + nickName);
+        boolean isTrue = memberService.isNickName(nickName);
+        return ResponseEntity.ok(!isTrue);
+    }
 }
