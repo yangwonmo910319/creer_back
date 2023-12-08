@@ -6,7 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 public interface GoodsRepository extends JpaRepository<GoodsDetail, Long> {
     Page<GoodsDetail> findAll(Pageable pageable);   // 전체 조회
+    List<GoodsDetail> findBygoodsTitleContaining(String keyword);  //글 제목 검색
+    List<GoodsDetail> findBygoodsCategoryContaining(String keyword);  //글 테그 검색
 }
