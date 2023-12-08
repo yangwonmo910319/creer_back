@@ -1,12 +1,8 @@
 package com.team.creer_back.dto.goods;
 
 import com.team.creer_back.dto.member.MemberDto;
-import com.team.creer_back.entity.member.Member;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.common.util.impl.Log;
-
-import java.sql.Clob;
 
 @Getter
 @Setter
