@@ -2,6 +2,8 @@ package com.team.creer_back.entity.goods;
 
 import com.team.creer_back.entity.member.Member;
 import lombok.*;
+import org.hibernate.annotations.common.util.impl.Log;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 public class GoodsDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long goodsDetailId;
+    private Long goodsDetailId;         //기본키
     private String goodsCategory;       // 카테고리
     private String goodsPic;            // 상품 사진
     @Column(length = 1000)
@@ -27,5 +29,8 @@ public class GoodsDetail {
     private Member member;
 
     private String goodsPrice;          // 상품 가격
+
     private String goodsDeliveryFee;    // 배달비
+
+
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Clob;
+
 @Getter
 @Setter
 @AllArgsConstructor // 모든 필드를 파라미터로 받는 생성자
@@ -17,7 +19,7 @@ public class MemberReqDto {
     private String email;
     private String password;
     private String name;
-    private String image;
+    private String  image;
     // MemberReqDto -> Member
     public Member toEntity(PasswordEncoder passwordEncoder) { // 비밀번호 암호화, DI
         return Member.builder() // PasswordEncoder를 매개변수로 받아와서 회원의 비밀번호를 암호화하여 Member 객체를 생성(build사용)

@@ -3,6 +3,8 @@ package com.team.creer_back.dto.member;
 import com.team.creer_back.entity.member.Member;
 import lombok.*;
 
+import java.sql.Clob;
+
 @Getter
 @Setter
 @AllArgsConstructor

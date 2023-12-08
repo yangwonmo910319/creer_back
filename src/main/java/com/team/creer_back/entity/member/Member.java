@@ -26,8 +26,11 @@ public class Member {
     private String phoneNum;
     @Column(name = "nickName", nullable = false)
     private String nickName;
+    //이메일을 아이디로 사용!
     @Column(unique = true)
     private String email;
+    //사용자 대표 이미지
+    @Lob
     private String image;
 
     @Enumerated(EnumType.STRING)

@@ -2,6 +2,9 @@ package com.team.creer_back.dto.member;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.common.util.impl.Log;
+
+import java.sql.Clob;
 
 @Getter
 @Setter
