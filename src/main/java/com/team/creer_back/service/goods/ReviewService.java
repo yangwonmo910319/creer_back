@@ -71,7 +71,7 @@ public class ReviewService {
 
 
             GoodsReview goodsReview = new GoodsReview();
-            Long memberId = getCurrentMemberId();
+            Long memberId = Long.valueOf(5);
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
@@ -130,13 +130,13 @@ public class ReviewService {
     private GoodsDetailDto goodsEntityToDto(GoodsDetail goodsDetail) {
         GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
         MemberDto memberDto = new MemberDto();
-           goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
+        goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
         goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());//상품 설명
         goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());    // 상품 배송/환불/교환 안내
         goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
-         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
+        goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         Member member = goodsDetail.getMember();
         memberDto.setName(member.getImage());//판매자 사진
