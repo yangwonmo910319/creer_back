@@ -1,8 +1,10 @@
 package com.team.creer_back.controller.goods;
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
+import com.team.creer_back.dto.goods.GoodsPictureDto;
 import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.service.goods.GoodsService;
+import com.team.creer_back.service.goods.PictureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GoodsController {
     private final GoodsService goodsService; // 생성자를 통해서 값을 참조할 수 있음
-
+    private final PictureService pictureService; // 생성자를 통해서 값을 참조할 수 있음
     // 상품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<GoodsDetailDto>> goodsList() {
@@ -27,6 +29,12 @@ public class GoodsController {
     @PostMapping("/new")
     public ResponseEntity<Boolean> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
         boolean list = goodsService.insertGoods(goodsDetailDto);
+        return ResponseEntity.ok(list);
+    }
+    // 상품 이미지 등록
+    @PostMapping("/new/picture")
+    public ResponseEntity<Boolean> insertGoodsPicture(@RequestBody GoodsPictureDto goodsPictureDto) {
+        boolean list = pictureService.insertPicture(goodsPictureDto);
         return ResponseEntity.ok(list);
     }
     // 상품 삭제
