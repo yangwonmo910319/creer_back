@@ -35,8 +35,33 @@ public class GoodsController {
     @PostMapping("/new/picture")
     public ResponseEntity<Boolean> insertGoodsPicture(@RequestBody GoodsPictureDto goodsPictureDto) {
         boolean list = pictureService.insertPicture(goodsPictureDto);
+
         return ResponseEntity.ok(list);
     }
+    //상품 이미지 한장 삭제
+    @DeleteMapping("/delete/picture/{goodsPictureId}")
+    public ResponseEntity<Boolean> deleteGoodsPicture(@PathVariable Long goodsPictureId) {
+        boolean result = pictureService.deletePicture(goodsPictureId);
+        return ResponseEntity.ok(result);
+    }
+    //상품 이미지 수정
+//    @PutMapping("/update/picture/{goodsPictureId}")
+//    public ResponseEntity<Boolean> updateGoodsPicture(@PathVariable Long goodsPictureId, @RequestBody GoodsPictureDto goodsPictureDto) {
+//        boolean result = pictureService.updatePicture(goodsPictureId, goodsPictureDto);
+//        return ResponseEntity.ok(result);
+//    }
+
+    //상품 이미지 출력
+    @GetMapping("/select/picture/{num}")
+    public ResponseEntity<List<String>> updateGoodsPicture(@PathVariable Long num) {
+        List<String> list= pictureService.removeAndRetrievePictures(num);
+        return ResponseEntity.ok(list);
+    }
+
+
+
+
+
     // 상품 삭제
     @GetMapping("/delete/{num}")
     public ResponseEntity<Boolean> deleteGoods(@PathVariable Long num) {
