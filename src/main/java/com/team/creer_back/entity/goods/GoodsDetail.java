@@ -4,6 +4,7 @@ import com.team.creer_back.entity.member.Member;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "goodsDetail")
@@ -28,4 +29,9 @@ public class GoodsDetail {
 
     private String goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
+
+    
+    //게실글 삭제시 리뷰도 함께 삭제
+    @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
+    private List<GoodsReview> reviews;
 }

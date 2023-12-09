@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
 @Slf4j
@@ -25,59 +26,19 @@ public class ReviewService {
     private final ReivewRepository reivewRepository;
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository ;
-//    // 굿즈 전체 조회
-//    public List<GoodsDetailDto> getGoodsList() {
-//        List<GoodsDetail> goodsDetails = goodsRepository.findAll();
-//        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-//        for(GoodsDetail goodsDetail : goodsDetails) {
-//            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
-//        }
-//        return goodsDetailDtos;
-//    }
-//
-//    // 굿즈 필터 조회
-//    public  List<GoodsDetailDto>  selctGoodsCategory(String keyword) {
-//        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
-//        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-//        for(GoodsDetail goodsDetail : goodsDetails) {
-//            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
-//        }
-//        return goodsDetailDtos;
-//
-//    }
-//    // 굿즈 제목 조회
-//    public  List<GoodsDetailDto>  selctGoodsTitle(String keyword) {
-//        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsTitleContaining(keyword);
-//        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-//        for(GoodsDetail goodsDetail : goodsDetails) {
-//            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
-//        }
-//        return goodsDetailDtos;
-//
-//    }
-//    // 굿즈 한개 조회
-//    public GoodsDetailDto selrctGoods(Long id) {
-//            GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
-//                    () -> new RuntimeException("해당 글이 존재하지 않습니다.")
-//            );
-//            return goodsEntityToDto(goodsDetail);
-//        }
-
-
-
     // 리뷰 등록
     public boolean insertReview(GoodsReviewDto goodsDetailDto) {
         try {
-
-
             GoodsReview goodsReview = new GoodsReview();
-            Long memberId = Long.valueOf(5);
+            Long memberId = Long.valueOf(1);
+//            Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
             GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailDto.getGoodsDetailId()).orElseThrow(
                     () -> new RuntimeException("해당 글이 존재하지 않습니다.")
             );
+
             goodsReview.setGoodsDetail(goodsDetail);
             goodsReview.setMember(member);
             goodsReview.setReviewDate( goodsDetailDto .getReviewDate());
@@ -93,7 +54,35 @@ public class ReviewService {
         }
     }
 
-//
+    // 리뷰 전체 조회
+    public List<GoodsReviewDto> getReviewList(Long num) {
+            try {
+                GoodsDetail goodsDetail = goodsRepository.findById(num).orElseThrow(
+                        () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
+                );
+
+                List<GoodsReview> Reviews = reivewRepository.findByGoodsDetail(goodsDetail);
+                List<GoodsReviewDto> ReviewsDot = new ArrayList<>();
+                for (GoodsReview Review : Reviews) {
+                    ReviewsDot.add(ReviewEntityToDto(Review));
+                }
+                return ReviewsDot;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
 ////굿즈 한개 수정
 //public boolean updateGoods(Long id,GoodsDetailDto goodsDetailDto) {
 //    try {
@@ -127,22 +116,25 @@ public class ReviewService {
 
 
     //엔티티 -> Dto data교체
-    private GoodsDetailDto goodsEntityToDto(GoodsDetail goodsDetail) {
-        GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
+    private GoodsReviewDto ReviewEntityToDto(GoodsReview goodsReview) {
+        GoodsReviewDto goodsReviewDto = new GoodsReviewDto();
         MemberDto memberDto = new MemberDto();
-        goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
-        goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
-        goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
-        goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());//상품 설명
-        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());    // 상품 배송/환불/교환 안내
-        goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
-        goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
-        goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
-        Member member = goodsDetail.getMember();
+        goodsReviewDto.setGoodsReviewId(goodsReview.getGoodsReviewId());     //기본키
+        goodsReviewDto.setGoodsDetailId(goodsReview.getGoodsReviewId());     //기본키
+        Member member = goodsReview.getMember();
         memberDto.setName(member.getImage());//판매자 사진
         memberDto.setNickName(member.getNickName());//판매자 닉네임
-        goodsDetailDto.setMemberDto(memberDto);
-        return goodsDetailDto;
+        goodsReviewDto.setMemberDto(memberDto);
+        goodsReviewDto.setReviewDate(goodsReview.getReviewDate());     //기본키
+        goodsReviewDto.setReviewStar(goodsReview.getReviewStar());     //기본키
+        goodsReviewDto.setReviewImg(goodsReview.getReviewImg());     //기본키
+        goodsReviewDto.setReviewContent(goodsReview.getReviewContent());     //기본키
+
+
+
+
+
+        return goodsReviewDto;
     }
 
 }

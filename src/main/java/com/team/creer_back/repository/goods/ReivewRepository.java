@@ -12,4 +12,5 @@ import java.util.List;
 
 public interface ReivewRepository extends JpaRepository<GoodsReview, Long> {
 
+    List<GoodsReview> findByGoodsDetail(GoodsDetail goodsDetail);
 }

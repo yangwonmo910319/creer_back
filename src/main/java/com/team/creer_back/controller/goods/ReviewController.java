@@ -10,26 +10,28 @@ import org.hibernate.annotations.common.util.impl.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("api/Review")
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService; // 생성자를 통해서 값을 참조할 수 있음
-            // 굿즈 리플 등록
+            // 리뷰 등록
         @PostMapping("/new")
-        public ResponseEntity<Boolean> insertReply(@RequestBody GoodsReviewDto goodsDetailDto) {
+        public ResponseEntity<Boolean> insertReview(@RequestBody GoodsReviewDto goodsDetailDto) {
             boolean  list = reviewService.insertReview(goodsDetailDto);
             log.warn("insertReplyinsertReplyinsertReplyinsertReplyinsertReplyinsertReplyinsertReply");
             return ResponseEntity.ok(list);
         }
-//
-//    // 굿즈 전체 조회
-//    @GetMapping("/list")
-//    public ResponseEntity<List<GoodsDetailDto>> selctGoodsList() {
-//        List<GoodsDetailDto> list = goodsService.getGoodsList();
-//        return ResponseEntity.ok(list);
-//    }
+
+    // 리뷰 전체 조회
+    @GetMapping("/list/{num}")
+    public ResponseEntity<List<GoodsReviewDto>> selctReviewList(@PathVariable Long num) {
+        List<GoodsReviewDto> list = reviewService.getReviewList(num);
+        return ResponseEntity.ok(list);
+    }
 //    // 굿즈 하나 조회
 //    @GetMapping("/listDetail/{id}")
 //    public ResponseEntity<GoodsDetailDto>selrctGoods(@PathVariable Long id) {

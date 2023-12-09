@@ -23,7 +23,7 @@ public class GoodsService {
     private final GoodsRepository goodsRepository;
     private final MemberRepository memberRepository;
 
-    // 굿즈 전체 조회
+    // 상품 전체 조회
     public List<GoodsDetailDto> getGoodsList() {
         List<GoodsDetail> goodsDetails = goodsRepository.findAll();
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
@@ -33,7 +33,7 @@ public class GoodsService {
         return goodsDetailDtos;
     }
 
-    // 굿즈 필터 조회
+    // 상품 필터 조회
     public List<GoodsDetailDto> selctGoodsCategory(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
@@ -44,7 +44,7 @@ public class GoodsService {
 
     }
 
-    // 굿즈 제목 조회
+    // 상품 제목 조회
     public List<GoodsDetailDto> selctGoodsTitle(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsTitleContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
@@ -54,7 +54,16 @@ public class GoodsService {
         return goodsDetailDtos;
 
     }
-
+    // 상품 삭제
+    public boolean deleteGoods(Long id) {
+        try {
+            goodsRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     // 굿즈 한개 조회
     public GoodsDetailDto selrctGoods(Long id) {
         GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
@@ -64,11 +73,12 @@ public class GoodsService {
     }
 
 
-    // 클라스 등록
+    // 상품 등록
     public boolean insertGoods(GoodsDetailDto goodsDetailDto) {
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
-            Long memberId = getCurrentMemberId();
+//            Long memberId = getCurrentMemberId();
+            Long memberId = Long.valueOf(1);
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
@@ -90,7 +100,7 @@ public class GoodsService {
     }
 
 
-    //굿즈 한개 수정
+    //상품 한개 수정
     public boolean updateGoods(Long id, GoodsDetailDto goodsDetailDto) {
         try {
             Long memberId = getCurrentMemberId();
