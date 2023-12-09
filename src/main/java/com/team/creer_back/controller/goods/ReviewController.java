@@ -32,52 +32,27 @@ public class ReviewController {
         List<GoodsReviewDto> list = reviewService.getReviewList(num);
         return ResponseEntity.ok(list);
     }
-//    // 굿즈 하나 조회
-//    @GetMapping("/listDetail/{id}")
-//    public ResponseEntity<GoodsDetailDto>selrctGoods(@PathVariable Long id) {
-//        GoodsDetailDto goodsDetailDto = goodsService.selrctGoods(id);
-//        return ResponseEntity.ok(goodsDetailDto);
-//    }
-//
-//    // 굿즈 테그 필터
-//    @GetMapping("/listDetail/Category/{keyword}")
-//    public ResponseEntity <List<GoodsDetailDto>>  selctGoodsCategory(@PathVariable  String keyword) {
-//        List<GoodsDetailDto>list =  goodsService.selctGoodsCategory(keyword);
-//        return ResponseEntity.ok(list);
-//    }
-//
-//    // 굿즈 제목 필터
-//    @GetMapping("/listDetail/Title/{keyword}")
-//    public ResponseEntity <List<GoodsDetailDto>> selctGoodsTitle(@RequestParam String keyword) {
-//        List<GoodsDetailDto>list = goodsService.selctGoodsTitle(keyword);
-//        return ResponseEntity.ok(list);
-//    }
-//
-
-//
-//
-//    // 굿즈 수정
-//    @PutMapping("/modify/{id}")
-//    public ResponseEntity<Boolean> updateGoods(@PathVariable Long id, @RequestBody GoodsDetailDto goodsDetailDto) {
-//        boolean isTrue = goodsService.updateGoods(id, goodsDetailDto);
-//        return ResponseEntity.ok(isTrue);
-//    }
-//
-//
-//
-
-
-
-
-
-
-
-
-
-
-
-
+    // 리뷰 삭제
+    @GetMapping("/delete/{num}")
+    public ResponseEntity<Boolean> deleteReview(@PathVariable Long num) {
+        boolean list = reviewService.deleteReview(num);
+        return ResponseEntity.ok(list);
     }
+
+    // 리뷰 수정
+    @PostMapping("/update/{num}")
+    public ResponseEntity<Boolean> updateReview(@PathVariable Long num, @RequestBody GoodsReviewDto goodsDetailDto) {
+        boolean list = reviewService.updateReview(num,goodsDetailDto);
+        return ResponseEntity.ok(list);
+    }
+
+
+
+
+
+
+
+}
 
 
 

@@ -74,45 +74,36 @@ public class ReviewService {
         }
 
 
+    // 리뷰 삭제
+    public boolean deleteReview(Long id) {
+        try {
+            reivewRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
+    // 리뷰 수정
+    public boolean updateReview(Long num,GoodsReviewDto goodsDetailDto) {
+        try {
+            GoodsReviewDto goodsReviewDto = new GoodsReviewDto();
+            GoodsReview goodsReview = reivewRepository.findById(num).orElseThrow(
+                    () -> new RuntimeException("해당 리뷰가 존재하지 않습니다.")
+            );
+            goodsReview.setReviewDate( goodsDetailDto .getReviewDate());
+            goodsReview.setReviewStar(goodsDetailDto.getReviewStar());
+            goodsReview.setReviewImg(goodsDetailDto.getReviewImg());
+            goodsReview.setReviewContent(goodsDetailDto.getReviewContent());
+            reivewRepository.save(goodsReview);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-
-
-
-
-
-
-
-////굿즈 한개 수정
-//public boolean updateGoods(Long id,GoodsDetailDto goodsDetailDto) {
-//    try {
-//        Long memberId = getCurrentMemberId();
-//        Member member = memberRepository.findById(memberId).orElseThrow(
-//                () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
-//        );
-//
-//        GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailDto.getGoodsDetailId()).orElseThrow(
-//                () -> new RuntimeException("해당 상품이 존재하지 않습니다.")
-//        );
-//
-//        goodsDetail.setGoodsCategory(goodsDetailDto.getGoodsCategory());
-//        goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
-//        goodsDetail.setGoodsDesc(goodsDetailDto.getGoodsDesc());
-//        goodsDetail.setGoodsRefund(goodsDetailDto.getGoodsRefund());
-//        goodsDetail.setGoodsTitle(goodsDetailDto.getGoodsTitle());
-//        goodsDetail.setGoodsPrice(goodsDetailDto.getGoodsPrice());
-//        goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
-//        goodsDetail.setMember(member);
-//
-//        goodsRepository.save(goodsDetail);
-//        return true;
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        return false;
-//    }
-//}
-//
-//
 
 
     //엔티티 -> Dto data교체

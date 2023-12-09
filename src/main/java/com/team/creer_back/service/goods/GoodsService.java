@@ -64,7 +64,7 @@ public class GoodsService {
             return false;
         }
     }
-    // 굿즈 한개 조회
+    // 상품 한개 조회
     public GoodsDetailDto selrctGoods(Long id) {
         GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 글이 존재하지 않습니다.")
@@ -103,7 +103,8 @@ public class GoodsService {
     //상품 한개 수정
     public boolean updateGoods(Long id, GoodsDetailDto goodsDetailDto) {
         try {
-            Long memberId = getCurrentMemberId();
+            Long memberId = Long.valueOf(1);
+//            Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
