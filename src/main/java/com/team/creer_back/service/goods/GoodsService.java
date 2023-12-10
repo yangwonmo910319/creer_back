@@ -65,7 +65,7 @@ public class GoodsService {
         }
     }
     // 상품 한개 조회
-    public GoodsDetailDto selrctGoods(Long id) {
+    public GoodsDetailDto getGoods(Long id) {
         GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 글이 존재하지 않습니다.")
         );

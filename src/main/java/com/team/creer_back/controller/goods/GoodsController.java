@@ -25,6 +25,12 @@ public class GoodsController {
         List<GoodsDetailDto> list = goodsService.getGoodsList();
         return ResponseEntity.ok(list);
     }
+    // 상품 하나 조회
+    @GetMapping("/list/{id}")
+    public ResponseEntity<GoodsDetailDto> goods(@PathVariable Long id){
+        GoodsDetailDto list = goodsService.getGoods(id);
+        return ResponseEntity.ok(list);
+    }
     // 상품 등록
     @PostMapping("/new")
     public ResponseEntity<Boolean> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
