@@ -25,7 +25,7 @@ public class AuthController {  // 프론트와 백 연결해서 받아옴, 프�
     //@RequestBody : HttpRequest의 본문 requestBody의 내용을 자바 객체로 매핑하는 역할
     // ResponseEntity : HttpEntity를 상속 받고 사용자의 응답 데이터가 포함된 클래스로 HttpStatus,HttpHeaders,HttpBody 포함
     public ResponseEntity<MemberResDto> signup(@RequestBody MemberReqDto requestDto) {
-        log.warn("가입가입가입가입가입가입가입가입가입가입가입가입가입가입");
+        log.warn("가입가입가입가입가입가입가입가입가입가입가입가입가입가입~");
         return ResponseEntity.ok(authService.signup(requestDto));
     }
 
