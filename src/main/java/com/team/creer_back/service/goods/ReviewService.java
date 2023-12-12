@@ -113,7 +113,7 @@ public class ReviewService {
         goodsReviewDto.setGoodsReviewId(goodsReview.getGoodsReviewId());     //기본키
         goodsReviewDto.setGoodsDetailId(goodsReview.getGoodsReviewId());     //기본키
         Member member = goodsReview.getMember();
-        memberDto.setName(member.getImage());//판매자 사진
+        memberDto.setImage(member.getImage());//판매자 사진
         memberDto.setNickName(member.getNickName());//판매자 닉네임
         goodsReviewDto.setMemberDto(memberDto);
         goodsReviewDto.setReviewDate(goodsReview.getReviewDate());     //기본키

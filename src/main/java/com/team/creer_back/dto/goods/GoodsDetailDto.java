@@ -4,11 +4,14 @@ import com.team.creer_back.dto.member.MemberDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Lob;
+
 @Getter
 @Setter
 public class GoodsDetailDto {
     private Long goodsDetailId;
     private String goodsCategory;       // 카테고리
+    @Lob
     private String goodsPic;            // 상품 사진
     private String goodsDesc;           // 상품 설명
     private String goodsRefund;         // 상품 배송/환불/교환 안내

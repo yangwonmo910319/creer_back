@@ -1,13 +1,13 @@
 package com.team.creer_back.entity.goods;
 
-import com.team.creer_back.entity.member.Member;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Entity
 @Table(name = "goods_picture")

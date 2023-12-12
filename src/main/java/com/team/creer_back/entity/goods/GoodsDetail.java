@@ -17,6 +17,7 @@ public class GoodsDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long goodsDetailId;
     private String goodsCategory;       // 카테고리
+    @Lob
     private String goodsPic;            // 상품 사진
     @Column(length = 1000)
     private String goodsDesc;            // 상품 설명
@@ -38,4 +39,13 @@ public class GoodsDetail {
     //게실글 삭제시  사진도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsPicture> pictures;
+
+    //게실글 삭제시 옵션도 함께 삭제
+    @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
+    private List<GoodsOption> options;
+
+    // 하나의 상품에 대한 여러 구매 정보를 저장할 수 있도록 OneToMany 관계 설정
+    @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
+    private List<GoodsPurchase> goodsPurchaseList;
+
 }

@@ -3,6 +3,8 @@ package com.team.creer_back.dto.goods;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.member.Member;
 import lombok.*;
+
+import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,7 +17,8 @@ public class GoodsReviewDto {
     private Long goodsDetailId;       // FK-물품 번호 찾기
     private MemberDto memberDto;            // FK-구매자닉네임 ,프사
     private LocalDateTime reviewDate;       // 후기 작성 시각
-    private double reviewStar;              // 별점
+    private double reviewStar;                   // 별점
+    @Lob
     private String reviewImg;               // 후기 사진
     private String reviewContent;           // 후기 글
 }
