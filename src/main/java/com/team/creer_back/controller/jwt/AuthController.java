@@ -22,7 +22,7 @@ public class AuthController {  // 프론트와 백 연결해서 받아옴, 프�
 
     // 회원가입
     @PostMapping("/signup") // 주어진 URI 표현식과 일치하는 HTTP POST 요청을 처리(추가/등록)
-    //@RequestBody : HttpRequest의 본문 requestBody의 내용을 자바 객체로 매핑하는 역할
+    // @RequestBody : HttpRequest의 본문 requestBody의 내용을 자바 객체로 매핑하는 역할
     // ResponseEntity : HttpEntity를 상속 받고 사용자의 응답 데이터가 포함된 클래스로 HttpStatus,HttpHeaders,HttpBody 포함
     public ResponseEntity<MemberResDto> signup(@RequestBody MemberReqDto requestDto) {
         log.warn("가입가입가입가입가입가입가입가입가입가입가입가입가입가입~");

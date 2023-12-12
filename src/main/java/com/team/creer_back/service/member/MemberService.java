@@ -1,24 +1,31 @@
 package com.team.creer_back.service.member;
 
 
+import antlr.Token;
+import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.dto.member.MemberReqDto;
 import com.team.creer_back.dto.member.MemberResDto;
 import com.team.creer_back.entity.member.Member;
+import com.team.creer_back.jwt.TokenProvider;
 import com.team.creer_back.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
 
     // 회원 가입 여부 확인
     public boolean isMember(String email) {
@@ -101,5 +108,45 @@ public class MemberService {
     // 별명 중복 확인
     public boolean isNickName(String nickName) {
         return memberRepository.existsByNickName(nickName);
+    }
+
+    // 카카오 가입 여부 확인
+    public boolean kakaoSignUpCheck(String kakaoNickName) {
+        return memberRepository.existsByNickName(kakaoNickName);
+    }
+
+    // 카카오 회원 가입
+    public boolean kakaoSignUp(MemberDto memberDto) {
+        try {
+            Member member = Member.builder()
+                    .nickName(memberDto.getNickName())
+                    .name("kakaoMember")
+                    .email("member@kakao.com")
+                    .password("kakaoPassword")
+                    .phoneNum("010-0000-0000")
+                    .address("kakaoAddress")
+                    .build();
+            memberRepository.save(member);
+            return true;
+        } catch (Exception e) {
+            log.warn("카카오 회원가입 에러 발생 : " + e);
+            return false;
+        }
+    }
+
+    // 카카오 로그인
+    public String kakaoLogin(String kakaoNickName) {
+        // 사용자 정보 조회
+        Member member = memberRepository.findByNickName(kakaoNickName).orElse(null);
+
+        // 인증 객체 생성
+        assert member != null;
+        Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, member.getAuthority());
+
+        // 토큰 생성
+        String token;
+        token = String.valueOf(tokenProvider.generateTokenDto(authentication));
+
+        return token;
     }
 }
