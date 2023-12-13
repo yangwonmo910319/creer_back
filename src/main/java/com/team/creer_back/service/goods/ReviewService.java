@@ -30,8 +30,7 @@ public class ReviewService {
     public boolean insertReview(GoodsReviewDto goodsDetailDto) {
         try {
             GoodsReview goodsReview = new GoodsReview();
-            Long memberId = Long.valueOf(1);
-//            Long memberId = getCurrentMemberId();
+            Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
@@ -60,7 +59,6 @@ public class ReviewService {
                 GoodsDetail goodsDetail = goodsRepository.findById(num).orElseThrow(
                         () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
                 );
-
                 List<GoodsReview> Reviews = reivewRepository.findByGoodsDetail(goodsDetail);
                 List<GoodsReviewDto> ReviewsDot = new ArrayList<>();
                 for (GoodsReview Review : Reviews) {
@@ -88,7 +86,6 @@ public class ReviewService {
     // 리뷰 수정
     public boolean updateReview(Long num,GoodsReviewDto goodsDetailDto) {
         try {
-            GoodsReviewDto goodsReviewDto = new GoodsReviewDto();
             GoodsReview goodsReview = reivewRepository.findById(num).orElseThrow(
                     () -> new RuntimeException("해당 리뷰가 존재하지 않습니다.")
             );
