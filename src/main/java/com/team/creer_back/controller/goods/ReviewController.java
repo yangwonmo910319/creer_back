@@ -22,7 +22,6 @@ public class ReviewController {
         @PostMapping("/new")
         public ResponseEntity<Boolean> insertReview(@RequestBody GoodsReviewDto goodsDetailDto) {
             boolean  list = reviewService.insertReview(goodsDetailDto);
-            log.warn("insertReplyinsertReplyinsertReplyinsertReplyinsertReplyinsertReplyinsertReply");
             return ResponseEntity.ok(list);
         }
 

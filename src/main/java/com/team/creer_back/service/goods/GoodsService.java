@@ -34,7 +34,7 @@ public class GoodsService {
     }
 
     // 상품 필터 조회
-    public List<GoodsDetailDto> selctGoodsCategory(String keyword) {
+    public List<GoodsDetailDto> selectGoodsCategory(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {
@@ -45,7 +45,7 @@ public class GoodsService {
     }
 
     // 상품 제목 조회
-    public List<GoodsDetailDto> selctGoodsTitle(String keyword) {
+    public List<GoodsDetailDto> selectGoodsTitle(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsTitleContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {

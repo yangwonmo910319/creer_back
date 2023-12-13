@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityUtil {
     private SecurityUtil() {
     }
+
     // SecurityContext의 Authentication 객체를 이용해 회원의 정보를 가져옴
     // Request가 들어올 때 JwtFilter의 doFilter에서 저장
     public static Long getCurrentMemberId() {

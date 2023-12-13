@@ -1,7 +1,6 @@
 package com.team.creer_back.service.goods;
 
 
-import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
@@ -16,16 +15,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReivewRepository reivewRepository;
     private final MemberRepository memberRepository;
-    private final GoodsRepository goodsRepository ;
+    private final GoodsRepository goodsRepository;
+
     // 리뷰 등록
     public boolean insertReview(GoodsReviewDto goodsDetailDto) {
         try {
@@ -37,14 +38,12 @@ public class ReviewService {
             GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailDto.getGoodsDetailId()).orElseThrow(
                     () -> new RuntimeException("해당 글이 존재하지 않습니다.")
             );
-
             goodsReview.setGoodsDetail(goodsDetail);
             goodsReview.setMember(member);
-            goodsReview.setReviewDate( goodsDetailDto .getReviewDate());
+            goodsReview.setReviewDate(goodsDetailDto.getReviewDate());
             goodsReview.setReviewStar(goodsDetailDto.getReviewStar());
             goodsReview.setReviewImg(goodsDetailDto.getReviewImg());
             goodsReview.setReviewContent(goodsDetailDto.getReviewContent());
-
             reivewRepository.save(goodsReview);
             return true;
         } catch (Exception e) {
@@ -55,21 +54,21 @@ public class ReviewService {
 
     // 리뷰 전체 조회
     public List<GoodsReviewDto> getReviewList(Long num) {
-            try {
-                GoodsDetail goodsDetail = goodsRepository.findById(num).orElseThrow(
-                        () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
-                );
-                List<GoodsReview> Reviews = reivewRepository.findByGoodsDetail(goodsDetail);
-                List<GoodsReviewDto> ReviewsDot = new ArrayList<>();
-                for (GoodsReview Review : Reviews) {
-                    ReviewsDot.add(ReviewEntityToDto(Review));
-                }
-                return ReviewsDot;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+        try {
+            GoodsDetail goodsDetail = goodsRepository.findById(num).orElseThrow(
+                    () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
+            );
+            List<GoodsReview> Reviews = reivewRepository.findByGoodsDetail(goodsDetail);
+            List<GoodsReviewDto> ReviewsDot = new ArrayList<>();
+            for (GoodsReview Review : Reviews) {
+                ReviewsDot.add(ReviewEntityToDto(Review));
             }
+            return ReviewsDot;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+    }
 
 
     // 리뷰 삭제
@@ -84,12 +83,12 @@ public class ReviewService {
     }
 
     // 리뷰 수정
-    public boolean updateReview(Long num,GoodsReviewDto goodsDetailDto) {
+    public boolean updateReview(Long num, GoodsReviewDto goodsDetailDto) {
         try {
             GoodsReview goodsReview = reivewRepository.findById(num).orElseThrow(
                     () -> new RuntimeException("해당 리뷰가 존재하지 않습니다.")
             );
-            goodsReview.setReviewDate( goodsDetailDto .getReviewDate());
+
             goodsReview.setReviewStar(goodsDetailDto.getReviewStar());
             goodsReview.setReviewImg(goodsDetailDto.getReviewImg());
             goodsReview.setReviewContent(goodsDetailDto.getReviewContent());
@@ -100,7 +99,6 @@ public class ReviewService {
             return false;
         }
     }
-
 
 
     //엔티티 -> Dto data교체
@@ -117,9 +115,6 @@ public class ReviewService {
         goodsReviewDto.setReviewStar(goodsReview.getReviewStar());     //기본키
         goodsReviewDto.setReviewImg(goodsReview.getReviewImg());     //기본키
         goodsReviewDto.setReviewContent(goodsReview.getReviewContent());     //기본키
-
-
-
 
 
         return goodsReviewDto;

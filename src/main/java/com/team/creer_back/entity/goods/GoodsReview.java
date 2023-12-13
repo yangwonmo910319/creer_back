@@ -8,7 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "goods_review")
@@ -29,15 +30,16 @@ public class GoodsReview {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    private LocalDateTime reviewDate;   // 날짜 넣어줌
+    private LocalDate reviewDate;   // 날짜 넣어줌
     @PrePersist
     public void perPersist() {
-        reviewDate = LocalDateTime.now();
+        reviewDate = LocalDate.now();
     }
 
     private double reviewStar;          // 별점
 
     private String reviewImg;           // 리뷰 이미지
+
     @Column(length = 1000)
     private String reviewContent;       // 리뷰 글
 
