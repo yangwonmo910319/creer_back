@@ -41,7 +41,6 @@ public class GoodsController {
     @PostMapping("/new/picture")
     public ResponseEntity<Boolean> insertGoodsPicture(@RequestBody GoodsPictureDto goodsPictureDto) {
         boolean list = pictureService.insertPicture(goodsPictureDto);
-
         return ResponseEntity.ok(list);
     }
     //상품 이미지 한장 삭제
