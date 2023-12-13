@@ -3,12 +3,9 @@ package com.team.creer_back.dto.member;
 import com.team.creer_back.constant.Authority;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.util.Collection;
 
 @Getter
 @Setter

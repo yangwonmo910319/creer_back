@@ -33,11 +33,17 @@ public class AuthService {
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");
         }
+        // 이메일 중복을 확인한 후, 중복되지 않을 경우 PasswordEncoder을 사용해 비밀번호를 암호화하고 회원 정보를 저장
         Member member = requestDto.toEntity(passwordEncoder);
         return MemberResDto.of(memberRepository.save(member));
     }
 
+    // 로그인
     public TokenDto login(MemberReqDto requestDto) {
+        /*
+        사용자가 유효한 경우, TokenProvider를 사용해서 액세스 토큰 과 리프레시 토큰을 생성,
+        해당 토큰들은 TokenDto에 담겨서 클라이언트에게 전달된다.
+        */
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
         return tokenProvider.generateTokenDto(authentication);
