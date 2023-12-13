@@ -1,6 +1,6 @@
 package com.team.creer_back.security;
 
-import com.team.creer_back.jwt.TokenProvider;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// 기본적으로 스프링 시큐리티에 필요한 설정 → jwt 적용 및 authentication 필요한 API 주소 설정
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity // 스프링 시큐리티를 활성화 하고 웹 보안 설정을 구성하는 데 사용
+@EnableWebSecurity // 스프링 보안를 활성화 하고 웹 보안 설정을 구성하는 데 사용
 @Component
 public class WebSecurityConfig implements WebMvcConfigurer {
 

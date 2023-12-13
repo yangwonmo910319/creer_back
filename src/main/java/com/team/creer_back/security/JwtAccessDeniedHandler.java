@@ -9,13 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-// 접근 권한 없을 때 403 에러
-@Component // Bean으로 등록
+// 인가 예외 처리
+// 주로, 인증에는 성공했으나, 요청한 요소에 대한 접근 권한이 없을 때 "403 Forbidden Error" 를 반환
+@Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
-
-    @Override // 권한이 없는 경우 403 Forbidden 에러를 리턴할 클래스
+    @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        // 필요한 권환이 없이 접근하려 할때 403
-        response.sendError(HttpServletResponse.SC_FORBIDDEN); // 권한이 없으면 403 Forbidden 에러를 리턴
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }

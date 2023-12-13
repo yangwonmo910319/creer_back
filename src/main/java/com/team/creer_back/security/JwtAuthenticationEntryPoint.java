@@ -8,13 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// 인증 예외 처리
+// 사용자가 로그인 되지 않았거나, 올바르지 않은 자격 증명으로 보호된 요소에 접근하려고 할때 "401 Unauthorized Error" 를 반환
 @Component
-// 인증에 실패했을 때 401 Unauthorized 에러를 리턴할 클래스
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        // 인증에 실패하면 401 Unauthorized 에러를 리턴
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

@@ -1,13 +1,12 @@
 package com.team.creer_back.service.member;
 
 
-import antlr.Token;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.dto.member.MemberReqDto;
 import com.team.creer_back.dto.member.MemberResDto;
 import com.team.creer_back.entity.member.Member;
-import com.team.creer_back.jwt.TokenProvider;
 import com.team.creer_back.repository.member.MemberRepository;
+import com.team.creer_back.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

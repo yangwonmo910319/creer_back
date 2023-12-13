@@ -1,8 +1,6 @@
 package com.team.creer_back.security;
 
 
-import com.team.creer_back.jwt.JwtFilter;
-import com.team.creer_back.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

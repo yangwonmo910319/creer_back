@@ -1,4 +1,4 @@
-package com.team.creer_back.jwt;
+package com.team.creer_back.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

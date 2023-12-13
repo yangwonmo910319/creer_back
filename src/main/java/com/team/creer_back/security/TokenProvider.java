@@ -1,4 +1,4 @@
-package com.team.creer_back.jwt;
+package com.team.creer_back.security;
 
 import com.team.creer_back.dto.jwt.TokenDto;
 import io.jsonwebtoken.*;
@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+// 추가된 라이브러리를 사용해서 JWT를 생성하고 검증하는 클래스
 
 // 유저 정보로 jwt access/refresh 토큰 생성 및 재발급 + 토큰으로부터 유저 정보 받아옴
 @Slf4j
