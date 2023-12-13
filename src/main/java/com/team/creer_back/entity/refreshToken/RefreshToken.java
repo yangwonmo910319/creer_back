@@ -1,4 +1,4 @@
-package com.team.creer_back.entity.RefreshToken;
+package com.team.creer_back.entity.refreshToken;
 
 import com.team.creer_back.entity.member.Member;
 import lombok.Getter;
