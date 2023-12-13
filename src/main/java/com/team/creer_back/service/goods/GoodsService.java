@@ -2,8 +2,10 @@ package com.team.creer_back.service.goods;
 
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
+import com.team.creer_back.dto.goods.GoodsPictureDto;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
+import com.team.creer_back.entity.goods.GoodsPicture;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
 import com.team.creer_back.repository.member.MemberRepository;
@@ -150,4 +152,21 @@ public class GoodsService {
         return goodsDetailDto;
     }
 
+    // 상품 메인 사진 등록
+    public boolean insertPicture(GoodsDetailDto goodsDetailDto) {
+        try {
+            GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailDto.getGoodsDetailId()).orElseThrow(
+                    () -> new RuntimeException("해당 글이 존재하지 않습니다.")
+            );
+            goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
+            goodsRepository.save(goodsDetail);
+
+
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -88,7 +88,6 @@ public class ReviewService {
             GoodsReview goodsReview = reivewRepository.findById(num).orElseThrow(
                     () -> new RuntimeException("해당 리뷰가 존재하지 않습니다.")
             );
-
             goodsReview.setReviewStar(goodsDetailDto.getReviewStar());
             goodsReview.setReviewImg(goodsDetailDto.getReviewImg());
             goodsReview.setReviewContent(goodsDetailDto.getReviewContent());
@@ -104,9 +103,10 @@ public class ReviewService {
     //엔티티 -> Dto data교체
     private GoodsReviewDto ReviewEntityToDto(GoodsReview goodsReview) {
         GoodsReviewDto goodsReviewDto = new GoodsReviewDto();
+        GoodsDetail goodsDetail = goodsReview.getGoodsDetail();
         MemberDto memberDto = new MemberDto();
         goodsReviewDto.setGoodsReviewId(goodsReview.getGoodsReviewId());     //기본키
-        goodsReviewDto.setGoodsDetailId(goodsReview.getGoodsReviewId());     //기본키
+        goodsReviewDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
         Member member = goodsReview.getMember();
         memberDto.setImage(member.getImage());//판매자 사진
         memberDto.setNickName(member.getNickName());//판매자 닉네임

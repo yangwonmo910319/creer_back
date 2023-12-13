@@ -20,8 +20,8 @@ public class GoodsPicture {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long goodsPictureId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 물품 번호로 리뷰 찾기
-    @JoinColumn(name = "goods_Detail_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goods_detail_id")
     private GoodsDetail goodsDetail;
 
     @Lob

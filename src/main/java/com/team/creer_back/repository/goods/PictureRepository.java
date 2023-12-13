@@ -11,5 +11,6 @@ import java.util.List;
 
 public interface PictureRepository extends JpaRepository<GoodsPicture, Long> {
 
-    List<GoodsReview> findByGoodsDetail(GoodsDetail goodsDetail);
+
+    List<GoodsPicture> findByGoodsDetail(GoodsDetail goodsDetail);
 }

@@ -36,10 +36,6 @@ public class MemberService {
         Member member = memberRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
         );
-        log.info(member.getAddress());
-        log.info(member.getName());
-        log.info(member.getNickName());
-        log.info(member.getImage());
         return convertEntityToDto(member);
     }
 

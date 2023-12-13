@@ -39,8 +39,8 @@ public class GoodsController {
     }
     // 상품 이미지 등록
     @PostMapping("/new/picture")
-    public ResponseEntity<Boolean> insertGoodsPicture(@RequestBody GoodsPictureDto goodsPictureDto) {
-        boolean list = pictureService.insertPicture(goodsPictureDto);
+    public ResponseEntity<Boolean> insertGoodsPicture(@RequestBody GoodsDetailDto goodsDetailDto) {
+        boolean list = goodsService.insertPicture(goodsDetailDto);
         return ResponseEntity.ok(list);
     }
     //상품 이미지 한장 삭제
@@ -49,23 +49,13 @@ public class GoodsController {
         boolean result = pictureService.deletePicture(goodsPictureId);
         return ResponseEntity.ok(result);
     }
-    //상품 이미지 수정
-//    @PutMapping("/update/picture/{goodsPictureId}")
-//    public ResponseEntity<Boolean> updateGoodsPicture(@PathVariable Long goodsPictureId, @RequestBody GoodsPictureDto goodsPictureDto) {
-//        boolean result = pictureService.updatePicture(goodsPictureId, goodsPictureDto);
-//        return ResponseEntity.ok(result);
-//    }
 
     //상품 이미지 출력
     @GetMapping("/select/picture/{num}")
-    public ResponseEntity<List<String>> updateGoodsPicture(@PathVariable Long num) {
-        List<String> list= pictureService.removeAndRetrievePictures(num);
+    public ResponseEntity<List<GoodsPictureDto>> updateGoodsPicture(@PathVariable Long num) {
+        List<GoodsPictureDto> list= pictureService.removeAndRetrievePictures(num);
         return ResponseEntity.ok(list);
     }
-
-
-
-
 
     // 상품 삭제
     @GetMapping("/delete/{num}")
