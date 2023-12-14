@@ -146,7 +146,7 @@ public class GoodsService {
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         Member member = goodsDetail.getMember();
-        memberDto.setName(member.getImage());//판매자 사진
+        memberDto.setImage(member.getImage());//판매자 사진
         memberDto.setNickName(member.getNickName());//판매자 닉네임
         goodsDetailDto.setMemberDto(memberDto);
         return goodsDetailDto;
@@ -160,9 +160,6 @@ public class GoodsService {
             );
             goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
             goodsRepository.save(goodsDetail);
-
-
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();

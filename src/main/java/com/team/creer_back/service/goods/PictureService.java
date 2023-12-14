@@ -32,27 +32,25 @@ public class PictureService {
     private final GoodsRepository goodsRepository ;
 
 
-    // 사진 등록
-//    public boolean insertPicture(GoodsPictureDto goodsPictureDto) {
-//        try {
-//            GoodsDetail goodsDetail = goodsRepository.findById(  goodsPictureDto.getGoodsDetailId()).orElseThrow(
-//                    () -> new RuntimeException("해당 글이 존재하지 않습니다.")
-//            );
-//            log.warn(goodsPictureDto.getGoodsPictures().get(0));
-//            List<String> pictureList = goodsPictureDto.getGoodsPictures();
-//            for (String img : pictureList) {
-//                log.warn("goodsPictureDto.getGoodsPictures().get(0)goodsPictureDto.getGoodsPictures().get(0)");
-//                GoodsPicture goodsPicture = new GoodsPicture();
-//                goodsPicture.setGoodsDetail(goodsDetail);
-//                goodsPicture.setGoodsPictures(img);
-//                pictureRepository.save(goodsPicture);
-//            }
-//            return true;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
+    // 상품 사진 등록
+    public boolean insertPicture(GoodsPictureDto goodsPictureDto) {
+        log.warn("{}",goodsPictureDto.getGoodsDetailId());
+        log.warn("{}",goodsPictureDto.getGoodsPictureId());
+        log.warn("{}",goodsPictureDto.getGoodsPictures());
+        try {
+            GoodsPicture goodsPicture = new GoodsPicture();
+            GoodsDetail goodsDetail = goodsRepository.findById(goodsPictureDto.getGoodsDetailId()).orElseThrow(
+                    () -> new RuntimeException("해당 글이 존재하지 않습니다.")
+            );
+            goodsPicture.setGoodsDetail(goodsDetail);
+            goodsPicture.setGoodsPictures(goodsPictureDto.getGoodsPictures());
+            pictureRepository.save(goodsPicture);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     //사진 한장 삭제
     public boolean deletePicture(Long goodsPictureId) {
@@ -67,49 +65,45 @@ public class PictureService {
     //사진 출력+삭제
 
     public List<GoodsPictureDto> removeAndRetrievePictures(Long goodsDetailId) {
-            try {
-                GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailId).orElseThrow(
-                        () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
-                );
-                List<GoodsPicture> pictures = pictureRepository.findByGoodsDetail(goodsDetail);
-                List<GoodsPictureDto> pictureDtos = new ArrayList<>();
-                for ( GoodsPicture goodsPicture : pictures) {
-                    pictureDtos.add(PictureEntityToDto(goodsPicture));
-                }
-                return pictureDtos;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+        try {
+            GoodsDetail goodsDetail = goodsRepository.findById(goodsDetailId).orElseThrow(
+                    () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
+            );
+            List<GoodsPicture> pictures = pictureRepository.findByGoodsDetail(goodsDetail);
+            List<GoodsPictureDto> pictureDtos = new ArrayList<>();
+            for ( GoodsPicture goodsPicture : pictures) {
+                pictureDtos.add(PictureEntityToDto(goodsPicture));
             }
+            return pictureDtos;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
+    }
 
-//   //사진 수정
-//    public boolean updatePicture(Long goodsPictureId, GoodsPictureDto goodsPictureDto) {
-//        try {
-//            GoodsPicture existingPicture = pictureRepository.findById(goodsPictureId)
-//                    .orElseThrow(() -> new RuntimeException("해당 사진이 존재하지 않습니다."));
-//
-//
-//            existingPicture.setGoodsPictures(goodsPictureDto.getGoodsPictures());
-//
-//            pictureRepository.save(existingPicture);
-//
-//            return true;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-private GoodsPictureDto PictureEntityToDto(GoodsPicture goodsPicture) {
-    GoodsPictureDto goodsPictureDto = new GoodsPictureDto();
-    GoodsDetail goodsDetail = goodsPicture.getGoodsDetail();
-    goodsPictureDto.setGoodsPictureId(goodsPicture.getGoodsPictureId());
-    goodsPictureDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());
-    goodsPictureDto.setGoodsPictures(goodsPicture.getGoodsPictures());
+    //   //사진 수정
+    public boolean updatePicture(GoodsPictureDto goodsPictureDto) {
+        try {
+            GoodsPicture existingPicture = pictureRepository.findById(goodsPictureDto.getGoodsPictureId())
+                    .orElseThrow(() -> new RuntimeException("해당 상품 사진이 존재하지 않습니다."));
+            existingPicture.setGoodsPictures(goodsPictureDto.getGoodsPictures());
+            pictureRepository.save(existingPicture);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private GoodsPictureDto PictureEntityToDto(GoodsPicture goodsPicture) {
+        GoodsPictureDto goodsPictureDto = new GoodsPictureDto();
+        GoodsDetail goodsDetail = goodsPicture.getGoodsDetail();
+        goodsPictureDto.setGoodsPictureId(goodsPicture.getGoodsPictureId());
+        goodsPictureDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());
+        goodsPictureDto.setGoodsPictures(goodsPicture.getGoodsPictures());
 
 
-    return goodsPictureDto;
-}
+        return goodsPictureDto;
+    }
 
 
 
