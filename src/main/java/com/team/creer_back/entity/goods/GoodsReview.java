@@ -22,7 +22,7 @@ public class GoodsReview {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long goodsReviewId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 물품 번호로 리뷰 찾기
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)  // 물품 번호로 리뷰 찾기
     @JoinColumn(name = "goods_Detail_id")
     private GoodsDetail goodsDetail;
 

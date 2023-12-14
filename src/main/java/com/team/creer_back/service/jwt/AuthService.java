@@ -40,22 +40,22 @@ public class AuthService {
 
     // 로그인
     public TokenDto login(MemberReqDto requestDto) {
-        /*
-        사용자가 유효한 경우, TokenProvider를 사용해서 액세스 토큰 과 리프레시 토큰을 생성,
-        해당 토큰들은 TokenDto에 담겨서 클라이언트에게 전달된다.
-        */
+        // 사용자가 입력한 정보를 토대로 토큰을 생성, 인증용 객체라고 생각해도 무방하다.
         UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
+        // 이를 이용하여 인증을 시도,
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+
+        // 성공 시 새로운 토큰을 생성하여, TokenDto에 담아서 클라이언트에게 반환
         return tokenProvider.generateTokenDto(authentication);
     }
 
+    // 리프레시 토큰의 유효성을 검증한 후, 유효할 시 새로운 액세스 토큰을 생성해서 반화
     public TokenDto refreshAccessToken(String refreshToken) {
-        //refreshToken 검증
         try {
             if (tokenProvider.validateToken(refreshToken)) {
                 return tokenProvider.generateTokenDto(tokenProvider.getAuthentication(refreshToken));
             }
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             log.error("토큰 유효성 검증 중 예외 발생: {}", e.getMessage());
         }
         return null;

@@ -1,14 +1,18 @@
 package com.team.creer_back.entity.goods;
 
 import com.team.creer_back.entity.member.Member;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "goodsDetail")
-@Getter @Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 // 상품 상세페이지
@@ -31,21 +35,20 @@ public class GoodsDetail {
     private String goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
 
-    
-    //게실글 삭제시 리뷰도 함께 삭제
+
+    //게시글 삭제시 리뷰도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsReview> reviews;
 
-    //게실글 삭제시  사진도 함께 삭제
+    //게시글 삭제시  사진도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsPicture> pictures;
 
-    //게실글 삭제시 옵션도 함께 삭제
+    //게시글 삭제시 옵션도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsOption> options;
 
     // 하나의 상품에 대한 여러 구매 정보를 저장할 수 있도록 OneToMany 관계 설정
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsPurchase> goodsPurchaseList;
-
 }
