@@ -19,6 +19,19 @@ import java.util.List;
 public class GoodsController {
     private final GoodsService goodsService; // 생성자를 통해서 값을 참조할 수 있음
     private final PictureService pictureService; // 생성자를 통해서 값을 참조할 수 있음
+    // 상품 태그 조회
+    @GetMapping("/list/tag")
+    public ResponseEntity<List<GoodsDetailDto>> tagGoods(@RequestParam String  keyword){
+        List<GoodsDetailDto> list = goodsService.tagGoods(keyword);
+        return ResponseEntity.ok(list);
+    }
+    // 상품 제목 조회
+    @GetMapping("/list/title")
+    public ResponseEntity<List<GoodsDetailDto>>titleGoods(@RequestParam String  keyword){
+        List<GoodsDetailDto> list = goodsService.TitleGoods(keyword);
+        return ResponseEntity.ok(list);
+    }
+
     // 상품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<GoodsDetailDto>> goodsList() {
@@ -31,6 +44,7 @@ public class GoodsController {
         GoodsDetailDto list = goodsService.getGoods(id);
         return ResponseEntity.ok(list);
     }
+
     // 상품 등록
     @PostMapping("/new")
     public ResponseEntity<Boolean> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
