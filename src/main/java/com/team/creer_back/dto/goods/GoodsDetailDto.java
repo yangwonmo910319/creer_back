@@ -16,7 +16,7 @@ public class GoodsDetailDto {
 
     @Lob
     private String goodsPic;            // 상품 사진
-
+    @Lob
     private String goodsDesc;           // 상품 설명
     private String goodsRefund;         // 상품 배송/환불/교환 안내
     private String goodsTitle;          // 상품 이름

@@ -19,10 +19,6 @@ public class GoodsOption {
     private Long goodsOptionId;
     private String goodsOptionNum;
     private String goodsOptionContent;
-    private String goodsSelectNum;       // 수량 선택
-    private String goodsOrder;           // 요청사항
-    private String goodsTotalPrice;     // 총 금액 (배달비 제외)
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goodsDetail_id")
     private GoodsDetail goodsDetail;
