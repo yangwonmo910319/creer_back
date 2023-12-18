@@ -2,10 +2,14 @@ package com.team.creer_back.service.goods;
 
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
+import com.team.creer_back.dto.goods.GoodsOptionDto;
 import com.team.creer_back.dto.goods.GoodsPictureDto;
+import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
+import com.team.creer_back.entity.goods.GoodsOption;
 import com.team.creer_back.entity.goods.GoodsPicture;
+import com.team.creer_back.entity.goods.GoodsReview;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
 import com.team.creer_back.repository.member.MemberRepository;
@@ -66,25 +70,96 @@ public class GoodsService {
             return false;
         }
     }
-    // 상품 한개 조회
-    public GoodsDetailDto getGoods(Long id) {
-        GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("해당 글이 존재하지 않습니다.")
-        );
-        return goodsEntityToDto(goodsDetail);
+//    // 상품 한개 조회
+//    public GoodsDetailDto getGoods(Long id) {
+//        GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
+//                () -> new RuntimeException("해당 글이 존재하지 않습니다.")
+//        );
+//
+//        return goodsEntityToDto(goodsDetail);
+//    }
+
+    public GoodsDetailDto getGoods(Long goodsId) {
+        GoodsDetail goodsDetail = goodsRepository.findById(goodsId)
+                .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
+        GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
+        goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());
+        goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());
+        goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());
+        goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());
+        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());
+        goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());
+        goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());
+        goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());
+        //작성자(판매자) 정보
+        Member member = goodsDetail.getMember();
+        MemberDto memberDto = new MemberDto();
+        memberDto.setId(member.getId());
+        memberDto.setImage(member.getImage());
+        memberDto.setNickName(member.getNickName());
+        goodsDetailDto.setMemberDto(memberDto);
+
+        List<GoodsReview> reviews = goodsDetail.getReviews();
+        List<GoodsReviewDto> reviewDtos = new ArrayList<>();
+        List<GoodsOption> options = goodsDetail.getOptions();
+        List<GoodsOptionDto> goodsOptionDtos = new ArrayList<>();
+        for (GoodsReview review : reviews) {
+
+            GoodsReviewDto reviewDto = new GoodsReviewDto();
+            reviewDto.setGoodsReviewId(review.getGoodsReviewId());
+            reviewDto.setGoodsDetailId(review.getGoodsDetail().getGoodsDetailId());
+            // Member 정보를 MemberDto로 변환하여 할당
+            Member member1 = review.getMember();
+            if (member != null) {
+                MemberDto memberDto1 = member1.toDto();
+                reviewDto.setMemberDto(memberDto1);
+            }
+            reviewDto.setReviewContent(review.getReviewContent());
+            reviewDto.setReviewDate(review.getReviewDate());
+            reviewDto.setReviewImg(review.getReviewImg());
+            reviewDto.setReviewStar(review.getReviewStar());
+
+            // 다른 필요한 리뷰 정보 추가
+            reviewDtos.add(reviewDto);
+        }
+
+        for (GoodsOption option : options) {
+
+            GoodsOptionDto goodsReviewDto = new GoodsOptionDto();
+            goodsReviewDto.setGoodsOptionId(option.getGoodsOptionId());
+            goodsReviewDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());
+            goodsReviewDto.setGoodsOptionNum(option.getGoodsOptionNum());
+            goodsReviewDto.setGoodsOptionContent(option.getGoodsOptionContent());
+
+
+            // 다른 필요한 리뷰 정보 추가
+            goodsOptionDtos.add(goodsReviewDto);
+        }
+
+        goodsDetailDto.setReviews(reviewDtos);
+        goodsDetailDto.setOptions(goodsOptionDtos);
+        return goodsDetailDto;
     }
 
 
+
+
+
+
+
+
+
+
     // 상품 등록
-    public boolean insertGoods(GoodsDetailDto goodsDetailDto) {
+    public Long insertGoods(GoodsDetailDto goodsDetailDto) {
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
-//            Long memberId = getCurrentMemberId();
-            Long memberId = Long.valueOf(1);
+            Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
-            goodsDetail.setGoodsDetailId(goodsDetailDto.getGoodsDetailId());
+
+//            goodsDetail.setGoodsDetailId(goodsDetailDto.getGoodsDetailId());
             goodsDetail.setGoodsCategory(goodsDetailDto.getGoodsCategory());
             goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
             goodsDetail.setGoodsDesc(goodsDetailDto.getGoodsDesc());
@@ -93,11 +168,13 @@ public class GoodsService {
             goodsDetail.setGoodsPrice(goodsDetailDto.getGoodsPrice());
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setMember(member);
-            goodsRepository.save(goodsDetail);
-            return true;
+//            goodsRepository.save(goodsDetail);
+            GoodsDetail savedGoodsDetail = goodsRepository.save(goodsDetail);
+
+            return savedGoodsDetail.getGoodsDetailId();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return 0L;
         }
     }
 
@@ -105,8 +182,7 @@ public class GoodsService {
     //상품 한개 수정
     public boolean updateGoods(Long id, GoodsDetailDto goodsDetailDto) {
         try {
-            Long memberId = Long.valueOf(1);
-//            Long memberId = getCurrentMemberId();
+            Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );

@@ -2,7 +2,6 @@ package com.team.creer_back.controller.goods;
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsPictureDto;
-import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.service.goods.GoodsService;
 import com.team.creer_back.service.goods.PictureService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ public class GoodsController {
         List<GoodsDetailDto> list = goodsService.TitleGoods(keyword);
         return ResponseEntity.ok(list);
     }
-
     // 상품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<GoodsDetailDto>> goodsList() {
@@ -47,8 +45,8 @@ public class GoodsController {
 
     // 상품 등록
     @PostMapping("/new")
-    public ResponseEntity<Boolean> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
-        boolean list = goodsService.insertGoods(goodsDetailDto);
+    public ResponseEntity<Long> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
+        Long list = goodsService.insertGoods(goodsDetailDto);
         return ResponseEntity.ok(list);
     }
     // 상품 이미지 등록

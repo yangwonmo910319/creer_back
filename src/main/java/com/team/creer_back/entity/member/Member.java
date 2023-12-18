@@ -1,6 +1,7 @@
 package com.team.creer_back.entity.member;
 
 import com.team.creer_back.constant.Authority;
+import com.team.creer_back.dto.member.MemberDto;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -51,7 +52,13 @@ public class Member {
         this.nickName = nickName;
         this.authority = authority;
     }
-
+    public MemberDto toDto() {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setImage(this.getImage());
+        memberDto.setNickName(this.getNickName());
+        // 나머지 MemberDto의 필드를 채우는 작업을 수행합니다.
+        return memberDto;
+    }
     // getAuthorities() 를 호출 시, ROLE_USER 권한을 가진 GrantedAuthority의 리스트를 반환된다.
     // 이 경우, 모든 사용자에게 동일한 ROLE_USER 권한이 부여된다.
     // 사용자별로 다른 권한을 부여하기 위해서는 추가 작업이 필요하다.

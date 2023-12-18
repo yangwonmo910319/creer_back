@@ -34,9 +34,7 @@ public class PictureService {
 
     // 상품 사진 등록
     public boolean insertPicture(GoodsPictureDto goodsPictureDto) {
-        log.warn("{}",goodsPictureDto.getGoodsDetailId());
-        log.warn("{}",goodsPictureDto.getGoodsPictureId());
-        log.warn("{}",goodsPictureDto.getGoodsPictures());
+
         try {
             GoodsPicture goodsPicture = new GoodsPicture();
             GoodsDetail goodsDetail = goodsRepository.findById(goodsPictureDto.getGoodsDetailId()).orElseThrow(
