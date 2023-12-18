@@ -35,11 +35,11 @@ public class MyPageController {
         return myPageService.checkMemberInfo(memberDto);
     }
 
-    // 회원 삭제
+    // 회원 탈퇴
     @DeleteMapping("/delete")
-    public String deleteMember(@RequestBody MemberDto memberDto) {
-        myPageService.deleteMember(memberDto);
-        return "회원 탈퇴가 완료되었습니다.";
+    public ResponseEntity<Boolean> deleteMember(@RequestHeader("X-Email") String email) {
+        boolean isTrue = myPageService.deleteMember(email);
+        return ResponseEntity.ok(isTrue);
     }
 
     // 회원 수정

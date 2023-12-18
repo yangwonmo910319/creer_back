@@ -55,9 +55,15 @@ public class MyPageService {
     }
 
     // 회원 탈퇴
-    public void deleteMember(MemberDto memberDto) {
-        Member member = memberRepository.findByEmail(memberDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다."));
-        memberRepository.delete(member);
+    public boolean deleteMember(String email) {
+        try {
+            Member member = memberRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 이메일을 가진 회원이 존재하지 않습니다."));
+            memberRepository.delete(member);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
+
 }
