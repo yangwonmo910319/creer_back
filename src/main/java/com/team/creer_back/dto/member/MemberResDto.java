@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MemberResDto {
+    private Long id;
     private String nickName;
     private String address;
     private String phoneNum;

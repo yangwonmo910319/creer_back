@@ -2,7 +2,6 @@ package com.team.creer_back.controller.member;
 
 
 import com.team.creer_back.dto.member.MemberDto;
-import com.team.creer_back.dto.member.MemberReqDto;
 import com.team.creer_back.dto.member.MemberResDto;
 import com.team.creer_back.security.SecurityUtil;
 import com.team.creer_back.service.member.MemberService;
@@ -10,12 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -31,51 +28,12 @@ public class MemberController {
         this.memberDto = memberDto;
     }
 
-    // 회원 전체 조회
-    @GetMapping("/list")
-    public ResponseEntity<List<MemberResDto>> memberList() {
-        List<MemberResDto> list = memberService.getMemberList();
-        return ResponseEntity.ok(list);
-    }
-
-    // 총 페이지 수
-    @GetMapping("/list/count")
-    public ResponseEntity<Integer> memberCount(@RequestParam(defaultValue = "20") int page,
-                                               @RequestParam(defaultValue = "0") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        int pageCnt = memberService.getMemberPage(pageRequest);
-        return ResponseEntity.ok(pageCnt);
-    }
-
-    // 회원 조회 페이지네이션
-    @GetMapping("/list/page")
-    public ResponseEntity<List<MemberResDto>> memberList(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "20") int size) {
-        List<MemberResDto> list = memberService.getMemberList(page, size);
-        return ResponseEntity.ok(list);
-    }
-
     // 회원 상세 조회
     @GetMapping("/detail")
     public ResponseEntity<MemberResDto> memberDetail() {
         Long id = SecurityUtil.getCurrentMemberId();
         MemberResDto memberResDto = memberService.getMemberDetail(id);
         return ResponseEntity.ok(memberResDto);
-    }
-
-    // 회원 수정
-    @PutMapping("/modify")
-    public ResponseEntity<Boolean> memberModify(@RequestBody MemberReqDto memberDto) {
-        log.info("memberDto: {}", memberDto.getEmail());
-        boolean isTrue = memberService.modifyMember(memberDto);
-        return ResponseEntity.ok(isTrue);
-    }
-
-    // 회원 삭제
-    @DeleteMapping("/del/{email}")
-    public ResponseEntity<Boolean> memberDelete(@PathVariable String email) {
-        boolean isTrue = memberService.deleteMember(email);
-        return ResponseEntity.ok(isTrue);
     }
 
     // 별명 중복 확인
@@ -86,6 +44,7 @@ public class MemberController {
         return ResponseEntity.ok(!isTrue);
     }
 
+    // Kakao
     // 카카오 로그인 상태 확인
     @GetMapping("/checkKakaoLogin")
     public ResponseEntity<String> checkKakaoLogin(@RequestHeader("Authorization") String authorizationHeader) {

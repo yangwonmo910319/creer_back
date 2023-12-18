@@ -49,7 +49,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .authorizeRequests()
                 
                 // 특정 경로에 대해서 인증 없이 허용
-                .antMatchers("/auth/**", "/ws/**", "/movies/**", "/test/**", "/api/goods/**", "/goods/**", "/api/Review/**", "/Review/**", "/member/**", "/email/**").permitAll()
+                .antMatchers("/auth/**", "/ws/**", "/movies/**", "/test/**", "/api/goods/**", "/goods/**", "/api/Review/**", "/Review/**", "/member/**", "/email/**", "/MyPage/**").permitAll()
 
                 // Swagger에 관련된 리소스에 대해서 인증 없이 허용
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception").permitAll()
