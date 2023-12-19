@@ -15,6 +15,8 @@ import com.team.creer_back.repository.goods.GoodsRepository;
 import com.team.creer_back.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -241,5 +243,39 @@ public class GoodsService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // 페이지네이션
+    public List<GoodsDetailDto> getMovieList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<GoodsDetail> goodsDetails = goodsRepository.findAll(pageable).getContent();
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
+        for(GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(GoodsEntityToDto2(goodsDetail));
+        }
+        return goodsDetailDtos;
+    }
+    // 페이지 수 조회
+    public int getMoviePage(Pageable pageable) {
+        return goodsRepository.findAll(pageable).getTotalPages();
+    }
+
+    // DTO 변환
+    private GoodsDetailDto GoodsEntityToDto2( GoodsDetail goodsDetail) {
+        GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
+        MemberDto memberDto = new MemberDto();
+        goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
+        goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
+        goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
+        goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());//상품 설명
+        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());    // 상품 배송/환불/교환 안내
+        goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
+        goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
+        goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
+        Member member = goodsDetail.getMember();
+        memberDto.setImage(member.getImage());//판매자 사진
+        memberDto.setNickName(member.getNickName());//판매자 닉네임
+        goodsDetailDto.setMemberDto(memberDto);
+        return goodsDetailDto;
     }
 }

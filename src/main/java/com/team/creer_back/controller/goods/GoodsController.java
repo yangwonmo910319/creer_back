@@ -6,6 +6,7 @@ import com.team.creer_back.service.goods.GoodsService;
 import com.team.creer_back.service.goods.PictureService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,6 +82,23 @@ public class GoodsController {
     public ResponseEntity<Boolean> updateGoods(@PathVariable Long num, @RequestBody GoodsDetailDto goodsDetailDto) {
         boolean list = goodsService.updateGoods(num,goodsDetailDto);
         return ResponseEntity.ok(list);
+    }
+
+    // 페이지네이션
+    @GetMapping("/list/page")
+    public ResponseEntity<List<GoodsDetailDto>> goodsList (@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int size) {
+        List<GoodsDetailDto> list = goodsService.getMovieList(page, size);
+        log.info("list : {}", list);
+        return ResponseEntity.ok(list);
+    }
+    // 페이지 수 조회
+    @GetMapping("/list/count")
+    public ResponseEntity<Integer> goodsListCount(@RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size  ) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        int pageCnt = goodsService.getMoviePage(pageRequest);
+        return ResponseEntity.ok(pageCnt);
     }
 
 }
