@@ -41,6 +41,22 @@ public class GoodsService {
         return goodsDetailDtos;
     }
 
+
+
+    // 내 상품 전체 조회
+    public List<GoodsDetailDto> getMyGoods() {
+        Long memberId = getCurrentMemberId();
+        List<GoodsDetail> goodsDetails = goodsRepository.findByMemberId(memberId);
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
+        for (GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+        }
+        return goodsDetailDtos;
+    }
+
+
+
+
     // 상품 필터 조회
     public List<GoodsDetailDto> tagGoods(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);

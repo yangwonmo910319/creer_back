@@ -46,6 +46,12 @@ public class GoodsController {
         GoodsDetailDto list = goodsService.getGoods(id);
         return ResponseEntity.ok(list);
     }
+    // 상품 하나 조회
+    @GetMapping("/Mylist")
+    public ResponseEntity<List<GoodsDetailDto>> getMyGoods(){
+        List<GoodsDetailDto> list  = goodsService.getMyGoods();
+        return ResponseEntity.ok(list);
+    }
 
     // 상품 등록
     @PostMapping("/new")
@@ -87,6 +93,7 @@ public class GoodsController {
         return ResponseEntity.ok(list);
     }
 
+
     // 페이지네이션
     @GetMapping("/list/page")
     public ResponseEntity<List<GoodsDetailDto>> goodsList (@RequestParam(defaultValue = "0") int page,
@@ -95,6 +102,7 @@ public class GoodsController {
         log.info("list : {}", list);
         return ResponseEntity.ok(list);
     }
+
     // 페이지 수 조회
     @GetMapping("/list/count")
     public ResponseEntity<Integer> goodsListCount(@RequestParam(defaultValue = "0") int page,

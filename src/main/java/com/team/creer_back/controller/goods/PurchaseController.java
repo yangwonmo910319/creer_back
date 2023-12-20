@@ -1,7 +1,9 @@
 package com.team.creer_back.controller.goods;
 
+import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsPictureDto;
 import com.team.creer_back.dto.goods.GoodsPurchaseDto;
+import com.team.creer_back.entity.goods.GoodsPurchase;
 import com.team.creer_back.service.goods.PictureService;
 import com.team.creer_back.service.goods.PurchaseService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,16 @@ public  class PurchaseController {
         boolean list = purchaseService.insertPurchase(goodsPurchaseDto);
         return ResponseEntity.ok(list);
     }
+    //구매 목록 출력
+    @GetMapping("/list")
+    public ResponseEntity<List<GoodsPurchaseDto>> SelectPicture() {
+        List<GoodsPurchaseDto> list = purchaseService.SelectPicture();
+        return ResponseEntity.ok(list);
+    }
+
+
+
+
 }
 
 

@@ -1,10 +1,7 @@
 package com.team.creer_back.entity.goods;
 
 import com.team.creer_back.entity.member.Member;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +11,8 @@ import javax.persistence.*;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 // 상품 구매
 public class GoodsPurchase {
     @Id
