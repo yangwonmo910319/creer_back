@@ -112,6 +112,7 @@ public class TokenProvider {
             return true;
         } catch (SecurityException | MalformedJwtException e) {
             log.warn("잘못된 JWT 서명입니다.");
+            log.warn("토큰 출력 : " + token);
         } catch (ExpiredJwtException e) {
             log.warn("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {

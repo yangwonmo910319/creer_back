@@ -18,6 +18,7 @@ public class MemberReqDto {
     private String password;
     private String name;
     private String image;
+
     // MemberReqDto -> Member
     public Member toEntity(PasswordEncoder passwordEncoder) { // 비밀번호 암호화, DI
         return Member.builder() // PasswordEncoder를 매개변수로 받아와서 회원의 비밀번호를 암호화하여 Member 객체를 생성(build사용)
@@ -31,6 +32,7 @@ public class MemberReqDto {
                 .authority(Authority.ROLE_USER) // 회원 권한(일반 회원)
                 .build(); // Member 객체의 생성이 완료되면, build() 메소드를 호출하여 최종적으로 Member 객체를 생성하고 반환
     }
+
     // 로그인 기능에서 사용되며, 사용자의 인증 정보를 담고 있는 토큰을 생성하는 데 사용
     // 해당 토큰은 Spring Security의 인증 매커니즘에서 활용되어 사용자를 인증하고 권한을 부여하는 데에 활용
     public UsernamePasswordAuthenticationToken toAuthentication() { // 객체를 생성하여 인증(Authentication)을 나타내는 메소드인 toAuthentication를 정의

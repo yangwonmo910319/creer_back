@@ -18,7 +18,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 // OncePerRequestFilter : HTTP 요청 : 필터링 = 1 : 1 를 보장
-public class JwtFilter  extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
     private final TokenProvider tokenProvider;
@@ -27,20 +27,19 @@ public class JwtFilter  extends OncePerRequestFilter {
     private String resolveToken(HttpServletRequest request) {
         // 해당 헤더에서 토큰을 추출
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        
         // 토큰 앞에 지정된 문자열이 존재할 경우, 이를 제거한 후 토큰을 반환
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(7);
+            bearerToken = bearerToken.substring(7); // 첫번째 글자는 0, 7부터 끝까지를 선택
         }
-        
-        return null;
+        return bearerToken;
     }
 
     // 실제 필터링을 수행하는 메서드
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 요청 헤더에서 토큰을 추출
-        String jwt = resolveToken(request); 
+        String jwt = resolveToken(request);
+        log.warn("bearerToken : " + jwt);
 
         // 토큰이 유효하다면, 권한 등의 사용자 정보가 담긴 인증 객체를 가져와 Security Context 에 저장
         // Security Context에 저장된 인증 정보는 이후 요청 처리 과정에서 사용 가능

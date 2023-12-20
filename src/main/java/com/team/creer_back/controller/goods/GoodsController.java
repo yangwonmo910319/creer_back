@@ -31,12 +31,14 @@ public class GoodsController {
         List<GoodsDetailDto> list = goodsService.TitleGoods(keyword);
         return ResponseEntity.ok(list);
     }
+
     // 상품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<GoodsDetailDto>> goodsList() {
         List<GoodsDetailDto> list = goodsService.getGoodsList();
         return ResponseEntity.ok(list);
     }
+
     // 상품 하나 조회
     @GetMapping("/list/{id}")
     public ResponseEntity<GoodsDetailDto> goods(@PathVariable Long id){

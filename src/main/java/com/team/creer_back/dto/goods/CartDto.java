@@ -1,9 +1,6 @@
 package com.team.creer_back.dto.goods;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 @Getter
@@ -11,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder // 모든 필드를 사용하여 빌더 패턴 생성 가능
 public class CartDto {
-    private Long id;
     private Long memberId;
     private Long goodsDetailId;
 }
