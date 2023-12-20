@@ -2,6 +2,8 @@ package com.team.creer_back.controller.goods;
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsPictureDto;
+import com.team.creer_back.entity.goods.GoodsDetail;
+import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.service.goods.GoodsService;
 import com.team.creer_back.service.goods.PictureService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -31,14 +34,12 @@ public class GoodsController {
         List<GoodsDetailDto> list = goodsService.TitleGoods(keyword);
         return ResponseEntity.ok(list);
     }
-
     // 상품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<GoodsDetailDto>> goodsList() {
         List<GoodsDetailDto> list = goodsService.getGoodsList();
         return ResponseEntity.ok(list);
     }
-
     // 상품 하나 조회
     @GetMapping("/list/{id}")
     public ResponseEntity<GoodsDetailDto> goods(@PathVariable Long id){
@@ -89,7 +90,7 @@ public class GoodsController {
     // 페이지네이션
     @GetMapping("/list/page")
     public ResponseEntity<List<GoodsDetailDto>> goodsList (@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int size) {
+                                                           @RequestParam(defaultValue = "10") int size) {
         List<GoodsDetailDto> list = goodsService.getMovieList(page, size);
         log.info("list : {}", list);
         return ResponseEntity.ok(list);
@@ -97,10 +98,33 @@ public class GoodsController {
     // 페이지 수 조회
     @GetMapping("/list/count")
     public ResponseEntity<Integer> goodsListCount(@RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "10") int size  ) {
+                                                  @RequestParam(defaultValue = "10") int size  ) {
         PageRequest pageRequest = PageRequest.of(page, size);
         int pageCnt = goodsService.getMoviePage(pageRequest);
         return ResponseEntity.ok(pageCnt);
     }
 
+    @PostMapping("/insert")
+    public ResponseEntity<Boolean> goodsInsert(@RequestBody List<Map<String, String>> goodsList) {
+        log.info("movieList : {}", goodsList);
+
+        Member member  = new Member();
+        member.setId(Long.valueOf(1));
+
+
+
+        for(Map<String, String> data : goodsList) {
+            GoodsDetail  goodsDetail = new GoodsDetail();
+            goodsDetail. setGoodsCategory("뷰티");
+            goodsDetail.setGoodsPic(data.get("image"));
+            goodsDetail.setGoodsDesc("");
+            goodsDetail.setGoodsRefund("빠른 배송");
+            goodsDetail.setGoodsTitle(data.get("title"));
+            goodsDetail.setMember(member);
+            goodsDetail.setGoodsPrice(data.get("price"));
+            goodsDetail.setGoodsDeliveryFee("3000원");
+            goodsService.saveGoods(goodsDetail);
+        }
+        return ResponseEntity.ok(true);
+    }
 }

@@ -278,4 +278,11 @@ public class GoodsService {
         goodsDetailDto.setMemberDto(memberDto);
         return goodsDetailDto;
     }
+
+
+
+    // 상품 정보 저장
+    public void saveGoods(GoodsDetail goodsDetail) {
+        goodsRepository.save(goodsDetail);
+    }
 }
