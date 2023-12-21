@@ -22,19 +22,12 @@ public class CartController {
 
     // 장바구니에 추가
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addToCart(@RequestHeader("Authorization") String accessToken,
-                                             @RequestBody Map<String, Long> goods) {
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        Long goodsId = goods.get("goodsId");
-        CartDto cartDto = CartDto.builder()
-                .memberId(memberId)
-                .goodsDetailId(goodsId)
-                .build();
-
-        boolean isTrue = cartService.addToCart(cartDto);
-        return ResponseEntity.ok(!isTrue);
+    public ResponseEntity<Boolean> addToCart(@RequestBody CartDto cartDto){
+        boolean list = cartService.addToCart(cartDto);
+        return ResponseEntity.ok(list);
     }
 
+     // 장바구니 목록
     @GetMapping("/list")
     public ResponseEntity<List<CartDto>> getCartItems(@RequestHeader("Authorization") String accessToken) {
         Long memberId = SecurityUtil.getCurrentMemberId();

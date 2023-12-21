@@ -19,11 +19,26 @@ public class Cart {
     @GeneratedValue
     private Long id;
 
+    // 구매자
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "buyer_id")
+    private Member buyer;
+
+    // 판매자
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Member seller;
 
     @ManyToOne
     @JoinColumn(name = "goods_detail_id")
     private GoodsDetail goodsDetail;
+
+    @Column(name = "cart_option")
+    private String option;
+
+    @Column(name = "cart_quantity")
+    private Long quantity;
+
+    @Column(name = "cart_status")
+    private String status;
 }

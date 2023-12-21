@@ -7,20 +7,25 @@ import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.CartRepository;
 import com.team.creer_back.repository.goods.GoodsRepository;
 import com.team.creer_back.repository.member.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.modelmapper.ModelMapper;
-import java.util.stream.Collectors;
+
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
 
 @Transactional(readOnly = true)
 @Service
+@Slf4j
 public class CartService {
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
 
-    public CartService(CartRepository cartRepository, MemberRepository memberRepository, GoodsRepository goodsRepository){
+    public CartService(CartRepository cartRepository, MemberRepository memberRepository, GoodsRepository goodsRepository) {
         this.cartRepository = cartRepository;
         this.memberRepository = memberRepository;
         this.goodsRepository = goodsRepository;
@@ -30,36 +35,41 @@ public class CartService {
     @Transactional
     public boolean addToCart(CartDto cartDto) {
         try {
-            Member member = memberRepository.findById(cartDto.getMemberId())
-                    .orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
-            // orElseThrow : Optional 객체가 비어있을 경우, 즉 NULL일 경우에 예외를 발생시킨다.
-
-            GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetailId())
-                    .orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+            Long buyerId = getCurrentMemberId(); // 구매자
+            Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
+            Member seller = memberRepository.findById(cartDto.getSeller()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다!"));
+            GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!"));
 
             Cart cart = Cart.builder()
-                    .member(member)
+                    .buyer(buyer)
+                    .seller(seller)
                     .goodsDetail(goodsDetail)
+                    .option(cartDto.getOption())
+                    .quantity(cartDto.getQuantity())
+                    .status("결제 전")
                     .build();
 
-            cartRepository.save(cart);
+            cartRepository.save(cart); // 저장하는 로직 추가
+
             return true;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    public List<CartDto> getCartItems(Long memberId) {
-        List<Cart> cartItems = cartRepository.findByMemberId(memberId);
-        if (cartItems.isEmpty()) {
-            throw new RuntimeException("회원을 찾을 수 없습니다.");
-        }
 
-        // Entity 의 데이터를 DTO 로 매핑하는데 사용하는 라이브러리
-        // Collecter는?
-        ModelMapper modelMapper = new ModelMapper();
-        return cartItems.stream()
-                .map(cart -> modelMapper.map(cart, CartDto.class))
-                .collect(Collectors.toList());
-    }
+//    public List<CartDto> getCartItems(Long memberId) {
+//        List<Cart> cartItems = cartRepository.findById(memberId);
+//        if (cartItems.isEmpty()) {
+//            throw new RuntimeException("회원을 찾을 수 없습니다.");
+//        }
+//
+//        // Entity 의 데이터를 DTO 로 매핑하는데 사용하는 라이브러리
+//        // Collecter는?
+//        ModelMapper modelMapper = new ModelMapper();
+//        return cartItems.stream()
+//                .map(cart -> modelMapper.map(cart, CartDto.class))
+//                .collect(Collectors.toList());
+//    }
 }

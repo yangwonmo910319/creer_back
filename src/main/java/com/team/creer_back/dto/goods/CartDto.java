@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @Builder // 모든 필드를 사용하여 빌더 패턴 생성 가능
 public class CartDto {
-    private Long memberId;
+    private Long buyer;
+    private Long seller;
     private Long goodsDetailId;
+    private String option;
+    private Long quantity;
 }
