@@ -3,12 +3,10 @@ package com.team.creer_back.service.goods;
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsOptionDto;
-import com.team.creer_back.dto.goods.GoodsPictureDto;
 import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
 import com.team.creer_back.entity.goods.GoodsOption;
-import com.team.creer_back.entity.goods.GoodsPicture;
 import com.team.creer_back.entity.goods.GoodsReview;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
@@ -18,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GoodsService {
     private final GoodsRepository goodsRepository;
     private final MemberRepository memberRepository;
@@ -42,7 +42,6 @@ public class GoodsService {
     }
 
 
-
     // 내 상품 전체 조회
     public List<GoodsDetailDto> getMyGoods() {
         Long memberId = getCurrentMemberId();
@@ -53,8 +52,6 @@ public class GoodsService {
         }
         return goodsDetailDtos;
     }
-
-
 
 
     // 상품 필터 조회
@@ -78,7 +75,9 @@ public class GoodsService {
         return goodsDetailDtos;
 
     }
+
     // 상품 삭제
+    @Transactional
     public boolean deleteGoods(Long id) {
         try {
             goodsRepository.deleteById(id);
@@ -88,6 +87,7 @@ public class GoodsService {
             return false;
         }
     }
+
 //    // 상품 한개 조회
 //    public GoodsDetailDto getGoods(Long id) {
 //        GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
@@ -160,15 +160,8 @@ public class GoodsService {
     }
 
 
-
-
-
-
-
-
-
-
     // 상품 등록
+    @Transactional
     public Long insertGoods(GoodsDetailDto goodsDetailDto) {
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
@@ -198,6 +191,7 @@ public class GoodsService {
 
 
     //상품 한개 수정
+    @Transactional
     public boolean updateGoods(Long id, GoodsDetailDto goodsDetailDto) {
         try {
             Long memberId = getCurrentMemberId();
@@ -218,8 +212,8 @@ public class GoodsService {
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setMember(member);
 
-            goodsRepository.save(goodsDetail);
             return true;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -266,18 +260,19 @@ public class GoodsService {
         Pageable pageable = PageRequest.of(page, size);
         List<GoodsDetail> goodsDetails = goodsRepository.findAll(pageable).getContent();
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-        for(GoodsDetail goodsDetail : goodsDetails) {
+        for (GoodsDetail goodsDetail : goodsDetails) {
             goodsDetailDtos.add(GoodsEntityToDto2(goodsDetail));
         }
         return goodsDetailDtos;
     }
+
     // 페이지 수 조회
     public int getMoviePage(Pageable pageable) {
         return goodsRepository.findAll(pageable).getTotalPages();
     }
 
     // DTO 변환
-    private GoodsDetailDto GoodsEntityToDto2( GoodsDetail goodsDetail) {
+    private GoodsDetailDto GoodsEntityToDto2(GoodsDetail goodsDetail) {
         GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
         MemberDto memberDto = new MemberDto();
         goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
@@ -294,7 +289,6 @@ public class GoodsService {
         goodsDetailDto.setMemberDto(memberDto);
         return goodsDetailDto;
     }
-
 
 
     // 상품 정보 저장
