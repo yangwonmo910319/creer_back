@@ -21,7 +21,7 @@ public class GoodsDetailDto {
     private String goodsRefund;         // 상품 배송/환불/교환 안내
     private String goodsTitle;          // 상품 이름
     private MemberDto memberDto;      // 판매자(유저) 닉네임 + 프로필사진
-    private String goodsPrice;          // 상품 가격
+    private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
 
     private List<GoodsReviewDto> reviews;

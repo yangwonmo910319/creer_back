@@ -129,7 +129,7 @@ public class GoodsController {
             goodsDetail.setGoodsRefund("빠른 배송");
             goodsDetail.setGoodsTitle(data.get("title"));
             goodsDetail.setMember(member);
-            goodsDetail.setGoodsPrice(data.get("price"));
+            goodsDetail.setGoodsPrice(Long.valueOf(data.get("price")));
             goodsDetail.setGoodsDeliveryFee("3000원");
             goodsService.saveGoods(goodsDetail);
         }
