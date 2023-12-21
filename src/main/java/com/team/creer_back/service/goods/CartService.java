@@ -58,18 +58,18 @@ public class CartService {
         }
     }
 
+    public List<CartDto> getCartItems(Long memberId) {
+        List<Cart> cartItems = cartRepository.findByBuyer_Id(memberId);
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("회원을 찾을 수 없습니다.");
+        }
 
-//    public List<CartDto> getCartItems(Long memberId) {
-//        List<Cart> cartItems = cartRepository.findById(memberId);
-//        if (cartItems.isEmpty()) {
-//            throw new RuntimeException("회원을 찾을 수 없습니다.");
-//        }
-//
-//        // Entity 의 데이터를 DTO 로 매핑하는데 사용하는 라이브러리
-//        // Collecter는?
-//        ModelMapper modelMapper = new ModelMapper();
-//        return cartItems.stream()
-//                .map(cart -> modelMapper.map(cart, CartDto.class))
-//                .collect(Collectors.toList());
-//    }
+        // 아래 오류 수정~~~~~~~~~~~~~~~~~
+        // Entity 의 데이터를 DTO 로 매핑하는데 사용하는 라이브러리
+        // Collecter는?
+        ModelMapper modelMapper = new ModelMapper();
+        return cartItems.stream()
+                .map(cart -> modelMapper.map(cart, CartDto.class))
+                .collect(Collectors.toList());
+    }
 }
