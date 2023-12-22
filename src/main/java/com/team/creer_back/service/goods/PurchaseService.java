@@ -61,7 +61,7 @@ public class PurchaseService {
 
    //구매 목록 출력
     public List<GoodsPurchaseDto> SelectPicture() {
-        Long memberId = 23L;
+        Long memberId = getCurrentMemberId(); // 구매자
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findByBuyerId(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
         ModelMapper modelMapper = new ModelMapper();
