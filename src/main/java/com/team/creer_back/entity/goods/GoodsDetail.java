@@ -50,5 +50,5 @@ public class GoodsDetail {
 
     // 하나의 상품에 대한 여러 구매 정보를 저장할 수 있도록 OneToMany 관계 설정
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
-    private List<GoodsPurchase> goodsPurchaseList;
+    private List<GoodsPurchase> purchase;
 }

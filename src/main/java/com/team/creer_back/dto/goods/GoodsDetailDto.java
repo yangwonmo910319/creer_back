@@ -24,6 +24,7 @@ public class GoodsDetailDto {
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
 
-    private List<GoodsReviewDto> reviews;
-    private List<GoodsOptionDto> options;
+    private List<GoodsReviewDto> reviews;  // 모든 리뷰
+    private List<GoodsOptionDto> options; // 모든 옵션
+    private List<GoodsPurchaseDto> purchase; // 모든 구매 목록
 }

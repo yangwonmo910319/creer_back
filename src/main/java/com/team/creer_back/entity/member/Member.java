@@ -56,6 +56,7 @@ public class Member {
         MemberDto memberDto = new MemberDto();
         memberDto.setImage(this.getImage());
         memberDto.setNickName(this.getNickName());
+        memberDto.setAddress(this.getAddress());
         // 나머지 MemberDto의 필드를 채우는 작업을 수행합니다.
         return memberDto;
     }

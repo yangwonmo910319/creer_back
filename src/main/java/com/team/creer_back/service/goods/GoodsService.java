@@ -3,10 +3,12 @@ package com.team.creer_back.service.goods;
 
 import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsOptionDto;
+import com.team.creer_back.dto.goods.GoodsPurchaseDto;
 import com.team.creer_back.dto.goods.GoodsReviewDto;
 import com.team.creer_back.dto.member.MemberDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
 import com.team.creer_back.entity.goods.GoodsOption;
+import com.team.creer_back.entity.goods.GoodsPurchase;
 import com.team.creer_back.entity.goods.GoodsReview;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
@@ -48,7 +50,7 @@ public class GoodsService {
         List<GoodsDetail> goodsDetails = goodsRepository.findByMemberId(memberId);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {
-            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+            goodsDetailDtos.add(goodsEntityToDto2(goodsDetail));
         }
         return goodsDetailDtos;
     }
@@ -122,7 +124,6 @@ public class GoodsService {
         List<GoodsOption> options = goodsDetail.getOptions();
         List<GoodsOptionDto> goodsOptionDtos = new ArrayList<>();
         for (GoodsReview review : reviews) {
-
             GoodsReviewDto reviewDto = new GoodsReviewDto();
             reviewDto.setGoodsReviewId(review.getGoodsReviewId());
             reviewDto.setGoodsDetailId(review.getGoodsDetail().getGoodsDetailId());
@@ -136,20 +137,14 @@ public class GoodsService {
             reviewDto.setReviewDate(review.getReviewDate());
             reviewDto.setReviewImg(review.getReviewImg());
             reviewDto.setReviewStar(review.getReviewStar());
-
             // 다른 필요한 리뷰 정보 추가
-            reviewDtos.add(reviewDto);
-        }
-
+            reviewDtos.add(reviewDto);        }
         for (GoodsOption option : options) {
-
             GoodsOptionDto goodsReviewDto = new GoodsOptionDto();
             goodsReviewDto.setGoodsOptionId(option.getGoodsOptionId());
             goodsReviewDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());
             goodsReviewDto.setGoodsOptionNum(option.getGoodsOptionNum());
             goodsReviewDto.setGoodsOptionContent(option.getGoodsOptionContent());
-
-
             // 다른 필요한 리뷰 정보 추가
             goodsOptionDtos.add(goodsReviewDto);
         }
@@ -261,7 +256,7 @@ public class GoodsService {
         List<GoodsDetail> goodsDetails = goodsRepository.findAll(pageable).getContent();
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {
-            goodsDetailDtos.add(GoodsEntityToDto2(goodsDetail));
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
         }
         return goodsDetailDtos;
     }
@@ -272,9 +267,8 @@ public class GoodsService {
     }
 
     // DTO 변환
-    private GoodsDetailDto GoodsEntityToDto2(GoodsDetail goodsDetail) {
+    private GoodsDetailDto goodsEntityToDto2(GoodsDetail goodsDetail) {
         GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
-        MemberDto memberDto = new MemberDto();
         goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
@@ -283,10 +277,29 @@ public class GoodsService {
         goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
-        Member member = goodsDetail.getMember();
-        memberDto.setImage(member.getImage());//판매자 사진
-        memberDto.setNickName(member.getNickName());//판매자 닉네임
-        goodsDetailDto.setMemberDto(memberDto);
+        List<GoodsPurchase> goodsPurchases = goodsDetail.getPurchase();
+        List<GoodsPurchaseDto> goodsPurchaseDtos = new ArrayList<>();
+        for (GoodsPurchase goodsPurchase : goodsPurchases) {
+            GoodsPurchaseDto goodsPurchaseDto = new GoodsPurchaseDto();
+
+            Member member = goodsPurchase.getBuyer();
+            if (member != null) {
+                MemberDto memberDto = member.toDto();
+                goodsPurchaseDto.setBuyer(memberDto);
+
+            }
+
+
+            goodsPurchaseDto.setId(goodsPurchase.getId());
+            goodsPurchaseDto.setGoodsDetailId(goodsPurchase.getId());
+            goodsPurchaseDto.setOption(goodsPurchase.getOption());
+            goodsPurchaseDto.setQuantity(goodsPurchase.getQuantity());
+            goodsPurchaseDto.setStatus(goodsPurchase.getStatus());
+
+            // 다른 필요한 리뷰 정보 추가
+            goodsPurchaseDtos.add(goodsPurchaseDto);
+        }
+        goodsDetailDto.setPurchase(goodsPurchaseDtos);
         return goodsDetailDto;
     }
 

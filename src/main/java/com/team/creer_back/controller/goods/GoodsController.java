@@ -46,7 +46,7 @@ public class GoodsController {
         GoodsDetailDto list = goodsService.getGoods(id);
         return ResponseEntity.ok(list);
     }
-    // 상품 하나 조회
+    // 내가 등록한 상품만 조회
     @GetMapping("/Mylist")
     public ResponseEntity<List<GoodsDetailDto>> getMyGoods(){
         List<GoodsDetailDto> list  = goodsService.getMyGoods();
@@ -115,12 +115,8 @@ public class GoodsController {
     @PostMapping("/insert")
     public ResponseEntity<Boolean> goodsInsert(@RequestBody List<Map<String, String>> goodsList) {
         log.info("movieList : {}", goodsList);
-
         Member member  = new Member();
         member.setId(Long.valueOf(1));
-
-
-
         for(Map<String, String> data : goodsList) {
             GoodsDetail  goodsDetail = new GoodsDetail();
             goodsDetail. setGoodsCategory("뷰티");
