@@ -26,12 +26,14 @@ public class PurchaseService {
     private final GoodsRepository goodsRepository;
     private final MemberRepository memberRepository;
     private final PurchaseRepository purchaseRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public PurchaseService(GoodsRepository goodsRepository, MemberRepository memberRepository, PurchaseRepository purchaseRepository) {
+    public PurchaseService(GoodsRepository goodsRepository, MemberRepository memberRepository, PurchaseRepository purchaseRepository, ModelMapper modelMapper) {
         this.goodsRepository = goodsRepository;
         this.memberRepository = memberRepository;
         this.purchaseRepository = purchaseRepository;
+        this.modelMapper = modelMapper;
     }
 
     //구매 등록
@@ -64,7 +66,6 @@ public class PurchaseService {
         Long memberId = getCurrentMemberId(); // 구매자
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findByBuyerId(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
-        ModelMapper modelMapper = new ModelMapper();
         return goodsPurchases.stream()
                 .map(goodsPurchase -> modelMapper.map(goodsPurchase, GoodsPurchaseDto.class))
                 .collect(Collectors.toList());

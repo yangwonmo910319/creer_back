@@ -24,11 +24,13 @@ public class CartService {
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
     private final GoodsRepository goodsRepository;
+    private final ModelMapper modelMapper;
 
-    public CartService(CartRepository cartRepository, MemberRepository memberRepository, GoodsRepository goodsRepository) {
+    public CartService(CartRepository cartRepository, MemberRepository memberRepository, GoodsRepository goodsRepository, ModelMapper modelMapper) {
         this.cartRepository = cartRepository;
         this.memberRepository = memberRepository;
         this.goodsRepository = goodsRepository;
+        this.modelMapper = modelMapper;
     }
 
     // 장바구니에 추가
@@ -59,16 +61,17 @@ public class CartService {
     }
 
     public List<CartDto> getCartItems(Long memberId) {
-        List<Cart> cartItems = cartRepository.findByBuyer_Id(memberId);
-        if (cartItems.isEmpty()) {
-            throw new RuntimeException("회원을 찾을 수 없습니다.");
+        if (memberId == null) {
+            throw new RuntimeException("회원이 존재하지 않습니다.");
         }
 
-        // 아래 오류 수정~~~~~~~~~~~~~~~~~
-        // Entity 의 데이터를 DTO 로 매핑하는데 사용하는 라이브러리
-        // Collecter는?
-        ModelMapper modelMapper = new ModelMapper();
-        return cartItems.stream()
+        List<Cart> cartList = cartRepository.findByBuyer_Id(memberId);
+        if (cartList.isEmpty()) {
+            throw new RuntimeException("장바구니에 물품이 존재하지 않습니다.");
+        }
+
+        // Entity의 데이터를 DTO로 매핑해서 반환 (Entity -> DTO)
+        return cartList.stream()
                 .map(cart -> modelMapper.map(cart, CartDto.class))
                 .collect(Collectors.toList());
     }
