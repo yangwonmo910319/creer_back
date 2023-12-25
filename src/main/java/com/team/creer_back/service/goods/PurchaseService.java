@@ -54,6 +54,14 @@ public class PurchaseService {
             goodsPurchase.setQuantity(goodsPurchaseDto.getQuantity());
             goodsPurchase.setStatus("결제 전");
             purchaseRepository.save(goodsPurchase);
+               //재고 - 판매량 == 0 이면 판매중 -> 판매 정지로 변경
+            if(goodsDetail.getGoodsStock()-goodsPurchaseDto.getQuantity()==0){
+                goodsDetail.setGoodsStatus("stop");
+                goodsRepository.save(goodsDetail);
+            }
+            //재고 - 판매량
+            goodsDetail.setGoodsStock(goodsDetail.getGoodsStock() - goodsPurchaseDto.getQuantity());
+            goodsRepository.save(goodsDetail);
             return true;
         }  catch (Exception e) {
             e.printStackTrace();
