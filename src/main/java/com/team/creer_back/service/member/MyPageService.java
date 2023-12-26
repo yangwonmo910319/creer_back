@@ -54,6 +54,7 @@ public class MyPageService {
     }
 
     // 회원 탈퇴
+    @Transactional
     public boolean deleteMember(String email) {
         try {
             Member member = memberRepository.findByEmail(email)
