@@ -43,9 +43,9 @@ public class PurchaseService {
             GoodsPurchase goodsPurchase = new GoodsPurchase();
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다"));
-            log.warn("혹시? : " + goodsPurchaseDto.getSeller());
-            Member seller = memberRepository.findById(goodsPurchaseDto.getSeller()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
             GoodsDetail goodsDetail = goodsRepository.findById(goodsPurchaseDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+            Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
+
 
             goodsPurchase.setBuyer(buyer);
             goodsPurchase.setSeller(seller);
@@ -69,8 +69,7 @@ public class PurchaseService {
         }
     }
 
-
-    //구매 목록 출력
+   //구매 목록 출력
     public List<GoodsPurchaseDto> SelectPicture() {
         Long memberId = getCurrentMemberId(); // 구매자
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findByBuyerId(memberId)

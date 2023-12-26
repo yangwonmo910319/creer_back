@@ -111,6 +111,7 @@ public class GoodsController {
         int pageCnt = goodsService.getMoviePage(pageRequest);
         return ResponseEntity.ok(pageCnt);
     }
+
     @PostMapping("/insert")
     public ResponseEntity<Boolean> goodsInsert(@RequestBody List<Map<String, String>> goodsList) {
         log.info("movieList : {}", goodsList);
@@ -126,6 +127,7 @@ public class GoodsController {
             goodsDetail.setMember(member);
             goodsDetail.setGoodsPrice(Long.valueOf(data.get("price")));
             goodsDetail.setGoodsDeliveryFee("3000원");
+            goodsDetail.setGoodsStatus("sale");
             goodsService.saveGoods(goodsDetail);
         }
         return ResponseEntity.ok(true);
