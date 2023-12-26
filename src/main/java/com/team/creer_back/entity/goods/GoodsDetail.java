@@ -25,7 +25,7 @@ public class GoodsDetail {
     private String goodsPic;            // 상품 사진
     @Column(length = 1000)
     private String goodsDesc;            // 상품 설명
-    private String goodsRefund;         // 상품 배송/환불/교환 안내
+    private Long goodsStock;         // 상품 재고
     private String goodsTitle;          // 상품 이름
 
     @ManyToOne(fetch = FetchType.LAZY)  // 판매자 닉네임, 프사
@@ -34,6 +34,7 @@ public class GoodsDetail {
 
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
+    private String goodsStatus;    // 현재 판매 상태
 
 
     //게시글 삭제시 리뷰도 함께 삭제

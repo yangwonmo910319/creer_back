@@ -107,9 +107,10 @@ public class GoodsService {
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());
         goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());
-        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());
+        goodsDetailDto.setGoodsStock(goodsDetail.getGoodsStock());
         goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());
+        goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());
         //작성자(판매자) 정보
         Member member = goodsDetail.getMember();
@@ -169,9 +170,10 @@ public class GoodsService {
             goodsDetail.setGoodsCategory(goodsDetailDto.getGoodsCategory());
             goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
             goodsDetail.setGoodsDesc(goodsDetailDto.getGoodsDesc());
-            goodsDetail.setGoodsRefund(goodsDetailDto.getGoodsRefund());
+            goodsDetail.setGoodsStock(goodsDetailDto.getGoodsStock());
             goodsDetail.setGoodsTitle(goodsDetailDto.getGoodsTitle());
             goodsDetail.setGoodsPrice(goodsDetailDto.getGoodsPrice());
+            goodsDetail.setGoodsStatus("sale");
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setMember(member);
 //            goodsRepository.save(goodsDetail);
@@ -201,9 +203,10 @@ public class GoodsService {
             goodsDetail.setGoodsCategory(goodsDetailDto.getGoodsCategory());
             goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
             goodsDetail.setGoodsDesc(goodsDetailDto.getGoodsDesc());
-            goodsDetail.setGoodsRefund(goodsDetailDto.getGoodsRefund());
+            goodsDetail.setGoodsStock(goodsDetailDto.getGoodsStock());
             goodsDetail.setGoodsTitle(goodsDetailDto.getGoodsTitle());
             goodsDetail.setGoodsPrice(goodsDetailDto.getGoodsPrice());
+            goodsDetail.setGoodsStatus(goodsDetailDto.getGoodsStatus());   // 상품 판매 상태
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setMember(member);
 
@@ -224,9 +227,10 @@ public class GoodsService {
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
         goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());//상품 설명
-        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());    // 상품 배송/환불/교환 안내
+        goodsDetailDto.setGoodsStock(goodsDetail.getGoodsStock());    // 상품 배송/환불/교환 안내
         goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
+        goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());   // 상품 판매 상태
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         Member member = goodsDetail.getMember();
         memberDto.setImage(member.getImage());//판매자 사진
@@ -273,9 +277,10 @@ public class GoodsService {
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
         goodsDetailDto.setGoodsDesc(goodsDetail.getGoodsDesc());//상품 설명
-        goodsDetailDto.setGoodsRefund(goodsDetail.getGoodsRefund());    // 상품 배송/환불/교환 안내
+        goodsDetailDto.setGoodsStock(goodsDetail.getGoodsStock());    // 상품 배송/환불/교환 안내
         goodsDetailDto.setGoodsTitle(goodsDetail.getGoodsTitle());   // 상품 이름
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
+        goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());   // 상품 판매 상태
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         List<GoodsPurchase> goodsPurchases = goodsDetail.getPurchase();
         List<GoodsPurchaseDto> goodsPurchaseDtos = new ArrayList<>();
