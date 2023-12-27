@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Cart {
     @Id
     @GeneratedValue
-    private Long id;
+    private Long cartId;
 
     // 구매자
     @ManyToOne
@@ -39,6 +39,4 @@ public class Cart {
     @Column(name = "cart_quantity")
     private Long quantity;
 
-    @Column(name = "cart_status")
-    private String status;
 }
