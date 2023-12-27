@@ -89,9 +89,15 @@ public class PurchaseService {
 
 
     @Transactional
-    public Boolean updatePurchase(Long num,String content) {
+    public Boolean updatePurchase(int num,String content) {
+        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
+        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
+
+        log.info(""+num);
+        log.info(content);
+        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
         try{
-            GoodsPurchase goodsPurchase = purchaseRepository.findById(num).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+            GoodsPurchase goodsPurchase = purchaseRepository.findById((long) num).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
             goodsPurchase.setStatus(content);
             purchaseRepository.save(goodsPurchase);
             return true;

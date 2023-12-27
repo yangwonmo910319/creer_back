@@ -26,8 +26,8 @@ public  class PurchaseController {
 
     //결제 상황 변경
     @PostMapping("/update")
-    public ResponseEntity<Boolean> update(@RequestParam Long num,@RequestParam String content) {
-        boolean list = purchaseService.updatePurchase(num,content);
+    public ResponseEntity<Boolean> update(@RequestParam int id,@RequestParam String content) {
+        boolean list = purchaseService.updatePurchase(id,content);
         return ResponseEntity.ok(list);
     }
 
