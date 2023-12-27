@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.Optional;
 
 @Entity
 @Table(name = "Cart")
@@ -44,4 +45,6 @@ public class Cart {
     private String goodsImg;
     @Column(name = "cart_price")
     private Long price;
+
+
 }

@@ -43,4 +43,12 @@ public class CartController {
         return ResponseEntity.ok(result);
 
     }
+
+    // 장바구니 하나 출력
+    @GetMapping("/select/{num}")
+    public   ResponseEntity<CartDto> selectGoodsPicture(@PathVariable Long num) {
+       CartDto result = cartService.select(num);
+        return ResponseEntity.ok(result);
+
+    }
 }

@@ -75,6 +75,17 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
+    public CartDto select(Long id) {
+        Long memberId = getCurrentMemberId();
+        if (memberId == null) {
+            throw new RuntimeException("회원이 존재하지 않습니다.");
+        }
+        Cart cart = cartRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당 회원이 카트가 없습니다."));
+
+        // Entity의 데이터를 DTO로 매핑해서 반환 (Entity -> DTO)
+        return modelMapper.map(cart, CartDto.class);
+    }
 
 
     // 상품 삭제
