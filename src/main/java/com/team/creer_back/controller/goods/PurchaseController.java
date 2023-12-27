@@ -24,10 +24,23 @@ public  class PurchaseController {
         return ResponseEntity.ok(list);
     }
 
-    //구매 목록 출력
+    //결제 상황 변경
+    @PostMapping("/update")
+    public ResponseEntity<Boolean> update(@RequestParam Long num,@RequestParam String content) {
+        boolean list = purchaseService.updatePurchase(num,content);
+        return ResponseEntity.ok(list);
+    }
+
+    //판매 목록 출력
     @GetMapping("/list")
-    public ResponseEntity<List<GoodsPurchaseDto>> selectPicture() {
-        List<GoodsPurchaseDto> list = purchaseService.SelectPicture();
+    public ResponseEntity<List<GoodsPurchaseDto>> selectBuyer() {
+        List<GoodsPurchaseDto> list = purchaseService.selectBuyer();
+        return ResponseEntity.ok(list);
+    }
+    //판매 구매 출력
+    @GetMapping("/cart")
+    public ResponseEntity<List<GoodsPurchaseDto>> selectSeller() {
+        List<GoodsPurchaseDto> list = purchaseService.selectSeller();
         return ResponseEntity.ok(list);
     }
 }

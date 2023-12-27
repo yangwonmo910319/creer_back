@@ -46,7 +46,6 @@ public class PurchaseService {
             GoodsDetail goodsDetail = goodsRepository.findById(goodsPurchaseDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
             Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
 
-
             goodsPurchase.setBuyer(buyer);
             goodsPurchase.setSeller(seller);
             goodsPurchase.setGoodsDetail(goodsDetail);
@@ -69,8 +68,17 @@ public class PurchaseService {
         }
     }
 
-   //구매 목록 출력
-    public List<GoodsPurchaseDto> SelectPicture() {
+   //판매 목록 출력
+    public List<GoodsPurchaseDto> selectBuyer() {
+        Long memberId = getCurrentMemberId(); // 로그인 아이디
+        List<GoodsPurchase> goodsPurchases = purchaseRepository.findBySellerId(memberId)
+                .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
+        return goodsPurchases.stream()
+                .map(goodsPurchase -> modelMapper.map(goodsPurchase, GoodsPurchaseDto.class))
+                .collect(Collectors.toList());
+    }
+    //구매(장바구니) 목록 출력
+    public List<GoodsPurchaseDto> selectSeller() {
         Long memberId = getCurrentMemberId(); // 구매자
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findByBuyerId(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
@@ -78,4 +86,21 @@ public class PurchaseService {
                 .map(goodsPurchase -> modelMapper.map(goodsPurchase, GoodsPurchaseDto.class))
                 .collect(Collectors.toList());
     }
+
+
+    @Transactional
+    public Boolean updatePurchase(Long num,String content) {
+        try{
+            GoodsPurchase goodsPurchase = purchaseRepository.findById(num).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+            goodsPurchase.setStatus(content);
+            purchaseRepository.save(goodsPurchase);
+            return true;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 }
