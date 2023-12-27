@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class CartDto {
     private Long buyer;
     private Long seller;
-    private Long goodsDetailId;
+    private GoodsDetailDto goodsDetailId;
     private String option;
     private Long quantity;
 }

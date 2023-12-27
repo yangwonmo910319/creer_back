@@ -1,6 +1,7 @@
 package com.team.creer_back.utils;
 
 import com.team.creer_back.dto.goods.CartDto;
+import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.entity.goods.Cart;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
