@@ -39,16 +39,19 @@ public class CartService {
         try {
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
-            log.warn("zzz" + cartDto.getGoodsDetail().getGoodsDetailId());
-            GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetail().getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!")); // 중첩 DTO
-            Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다!"));
+            GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!")); // 중첩 DTO            log.warn("{}" + goodsDetail);
+            Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
             Cart cart = Cart.builder()
                     .buyer(buyer)
                     .seller(seller)
-                    .goodsDetail(goodsDetail)
+                    .goodsDetailId(cartDto.getGoodsDetailId())
                     .option(cartDto.getOption())
                     .quantity(cartDto.getQuantity())
+                    .title(cartDto.getTitle())
+                    .goodsImg(cartDto.getGoodsImg())
+                    .price(cartDto.getPrice())
                     .build();
+            cartRepository.save(cart);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,5 +73,19 @@ public class CartService {
         return cartList.stream()
                 .map(cart -> modelMapper.map(cart, CartDto.class))
                 .collect(Collectors.toList());
+    }
+
+
+
+    // 상품 삭제
+    @Transactional
+    public boolean   delete(Long id) {
+        try {
+            cartRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

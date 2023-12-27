@@ -17,28 +17,31 @@ import javax.persistence.*;
 public class Cart {
     @Id
     @GeneratedValue
-    private Long id;
-
+    private Long cartId;
     // 구매자
     @ManyToOne
     @JoinColumn(name = "buyer_id")
-    private Member buyer;
+    private Member  buyer;
 
     // 판매자
     @ManyToOne
     @JoinColumn(name = "seller_id")
-    private Member seller;
+    private Member  seller;
 
-    @ManyToOne
+
     @JoinColumn(name = "goods_detail_id")
-    private GoodsDetail goodsDetail;
+    private Long goodsDetailId;
 
     @Column(name = "cart_option")
     private String option;
 
     @Column(name = "cart_quantity")
     private Long quantity;
-
-    @Column(name = "cart_status")
-    private String status;
+    @Column(name = "cart_title")
+    private String title;
+    @Lob
+    @Column(name = "cart_goodsImg")
+    private String goodsImg;
+    @Column(name = "cart_price")
+    private Long price;
 }

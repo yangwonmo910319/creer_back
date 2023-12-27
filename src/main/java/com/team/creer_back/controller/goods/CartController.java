@@ -35,4 +35,12 @@ public class CartController {
 
         return ResponseEntity.ok(cartItems);
     }
+
+    // 장바구니  제거
+    @DeleteMapping("/delete/{num}")
+    public ResponseEntity<Boolean> deleteGoodsPicture(@PathVariable Long num) {
+        boolean result = cartService.delete(num);
+        return ResponseEntity.ok(result);
+
+    }
 }
