@@ -18,12 +18,12 @@ public class GoodsDetailDto {
     private String goodsPic;            // 상품 사진
     @Lob
     private String goodsDesc;           // 상품 설명
-    private String goodsRefund;         // 상품 배송/환불/교환 안내
+    private Long goodsStock;         // 상품 재고
     private String goodsTitle;          // 상품 이름
     private MemberDto memberDto;      // 판매자(유저) 닉네임 + 프로필사진
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
-
+    private String goodsStatus;    // 현재 판매 상태
     private List<GoodsReviewDto> reviews;  // 모든 리뷰
     private List<GoodsOptionDto> options; // 모든 옵션
     private List<GoodsPurchaseDto> purchase; // 모든 구매 목록

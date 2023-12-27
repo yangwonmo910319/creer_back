@@ -26,7 +26,7 @@ public  class PurchaseController {
 
     //구매 목록 출력
     @GetMapping("/list")
-    public ResponseEntity<List<GoodsPurchaseDto>> SelectPicture() {
+    public ResponseEntity<List<GoodsPurchaseDto>> selectPicture() {
         List<GoodsPurchaseDto> list = purchaseService.SelectPicture();
         return ResponseEntity.ok(list);
     }

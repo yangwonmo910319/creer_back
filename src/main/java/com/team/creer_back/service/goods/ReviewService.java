@@ -61,7 +61,7 @@ public class ReviewService {
             List<GoodsReview> Reviews = reivewRepository.findByGoodsDetail(goodsDetail);
             List<GoodsReviewDto> ReviewsDot = new ArrayList<>();
             for (GoodsReview Review : Reviews) {
-                ReviewsDot.add(ReviewEntityToDto(Review));
+                ReviewsDot.add(reviewEntityToDto(Review));
             }
             return ReviewsDot;
         } catch (Exception e) {
@@ -101,7 +101,7 @@ public class ReviewService {
 
 
     //엔티티 -> Dto data교체
-    private GoodsReviewDto ReviewEntityToDto(GoodsReview goodsReview) {
+    private GoodsReviewDto reviewEntityToDto(GoodsReview goodsReview) {
         GoodsReviewDto goodsReviewDto = new GoodsReviewDto();
         GoodsDetail goodsDetail = goodsReview.getGoodsDetail();
         MemberDto memberDto = new MemberDto();
@@ -115,8 +115,6 @@ public class ReviewService {
         goodsReviewDto.setReviewStar(goodsReview.getReviewStar());     //기본키
         goodsReviewDto.setReviewImg(goodsReview.getReviewImg());     //기본키
         goodsReviewDto.setReviewContent(goodsReview.getReviewContent());     //기본키
-
-
         return goodsReviewDto;
     }
 

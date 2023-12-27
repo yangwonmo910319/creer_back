@@ -43,9 +43,9 @@ public class PurchaseService {
             GoodsPurchase goodsPurchase = new GoodsPurchase();
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다"));
-            log.warn("혹시? : " + goodsPurchaseDto.getSeller());
-            Member seller = memberRepository.findById(goodsPurchaseDto.getSeller()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
             GoodsDetail goodsDetail = goodsRepository.findById(goodsPurchaseDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+            Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
+
 
             goodsPurchase.setBuyer(buyer);
             goodsPurchase.setSeller(seller);
@@ -54,6 +54,14 @@ public class PurchaseService {
             goodsPurchase.setQuantity(goodsPurchaseDto.getQuantity());
             goodsPurchase.setStatus("결제 전");
             purchaseRepository.save(goodsPurchase);
+            //재고 - 판매량 == 0 이면 판매중 -> 판매 정지로 변경
+            if(goodsDetail.getGoodsStock()-goodsPurchaseDto.getQuantity()==0){
+                goodsDetail.setGoodsStatus("stop");
+                goodsRepository.save(goodsDetail);
+            }
+            //재고 - 판매량
+            goodsDetail.setGoodsStock(goodsDetail.getGoodsStock() - goodsPurchaseDto.getQuantity());
+            goodsRepository.save(goodsDetail);
             return true;
         }  catch (Exception e) {
             e.printStackTrace();

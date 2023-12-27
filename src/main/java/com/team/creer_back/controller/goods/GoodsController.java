@@ -122,11 +122,12 @@ public class GoodsController {
             goodsDetail. setGoodsCategory("뷰티");
             goodsDetail.setGoodsPic(data.get("image"));
             goodsDetail.setGoodsDesc("");
-            goodsDetail.setGoodsRefund("빠른 배송");
+            goodsDetail.setGoodsStock(1000L);
             goodsDetail.setGoodsTitle(data.get("title"));
             goodsDetail.setMember(member);
             goodsDetail.setGoodsPrice(Long.valueOf(data.get("price")));
             goodsDetail.setGoodsDeliveryFee("3000원");
+            goodsDetail.setGoodsStatus("sale");
             goodsService.saveGoods(goodsDetail);
         }
         return ResponseEntity.ok(true);
