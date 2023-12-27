@@ -39,7 +39,8 @@ public class CartService {
         try {
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
-            GoodsDetail goodsDetail = goodsRepository.findById(Long.valueOf(261)).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!"));
+            log.warn("zzz" + cartDto.getGoodsDetail().getGoodsDetailId());
+            GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetail().getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!")); // 중첩 DTO
             Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다!"));
             Cart cart = Cart.builder()
                     .buyer(buyer)
@@ -48,9 +49,6 @@ public class CartService {
                     .option(cartDto.getOption())
                     .quantity(cartDto.getQuantity())
                     .build();
-
-            cartRepository.save(cart); // 저장하는 로직 추가
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();
