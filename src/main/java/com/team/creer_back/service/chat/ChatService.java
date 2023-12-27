@@ -11,7 +11,6 @@ import com.team.creer_back.repository.chat.ChatMessageRepository;
 import com.team.creer_back.repository.chat.ChatRoomMemberRepository;
 import com.team.creer_back.repository.chat.ChatRoomRepository;
 import com.team.creer_back.repository.member.MemberRepository;
-import com.team.creer_back.service.member.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -36,17 +35,15 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
     private final SessionService sessionService;
 
     @Autowired
-    public ChatService(ObjectMapper objectMapper, ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository, MemberRepository memberRepository, MemberService memberService, ChatRoomMemberRepository chatRoomMemberRepository, SessionService sessionService) {
+    public ChatService(ObjectMapper objectMapper, ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository, MemberRepository memberRepository, ChatRoomMemberRepository chatRoomMemberRepository, SessionService sessionService) {
         this.objectMapper = objectMapper;
         this.chatRoomRepository = chatRoomRepository;
         this.chatMessageRepository = chatMessageRepository;
         this.memberRepository = memberRepository;
-        this.memberService = memberService;
         this.chatRoomMemberRepository = chatRoomMemberRepository;
         this.sessionService = sessionService;
     }
@@ -63,17 +60,12 @@ public class ChatService {
 
     // [1-3] 새로운 채팅방을 생성하고, 해당 채팅방의 정보를 반환
     @Transactional
-    public ChatRoom createRoom(String roomName) {
+    public ChatRoom createRoom(String goodsId, String token) {
         UUID uuid = UUID.randomUUID();
         long randomId = uuid.getMostSignificantBits();
-        log.warn("Random Long from UUID: " + randomId);
 
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.setId(randomId);
-        chatRoom.setName(roomName);
-        chatRoom.setRegDate(LocalDateTime.now());
-
-        return chatRoom;
+        log.warn("adsadsad" + randomId + " dasdsa " + goodsId + token);
+        return null;
     }
 
     // [1-4] 이전 채팅 로그를 호출
@@ -86,8 +78,6 @@ public class ChatService {
     public void removeRoom(Long roomId) {
         chatRoomRepository.deleteById(roomId);
     }
-
-
 
     // [2] 채팅 세션 관리 메서드
     // [2-1] 채팅방에 입장한 세션을 추가하고 입장 메시지를 전송

@@ -83,7 +83,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
         public WebSocketSession getSession() {
             return this.session;
         }
-
         public ChatMessageDto getChatMessage() {
             return this.chatMessage;
         }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -25,9 +26,12 @@ public class ChatController {
 
     // 채팅방 생성
     @PostMapping("/new")
-    public ResponseEntity<String> createRoom(@RequestBody ChatRoomReqDto chatRoomReqDto) {
-        ChatRoom room = chatService.createRoom(chatRoomReqDto.getName());
-        log.warn(room.getName());
+    public ResponseEntity<String> createRoom(@Valid @RequestBody ChatRoomReqDto chatRoomReqDto) {
+        ChatRoom room = chatService.createRoom(chatRoomReqDto.getGoodsId(), chatRoomReqDto.getToken());
+
+
+
+
         return new ResponseEntity<>(room.getName(), HttpStatus.OK);
         // return new ResponseEntity<>; 는 HTTP 응답의 본문이 비어있다는 것을 의미
         // return new ResponseEntity<>(room.getRoomId(), HttpStatus.OK); 는 room.getRoomId()를 본문으로 가지는 ResponseEntity 객체를 생성하고, 상태 코드를 200으로 설정

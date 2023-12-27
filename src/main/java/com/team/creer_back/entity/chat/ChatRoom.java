@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChatRoom {
     @Id
     @Column(name = "room_id")

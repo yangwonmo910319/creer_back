@@ -12,6 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Slf4j
 public class ChatRoomReqDto {
-    private String email; // 채팅방 생성을 요청한 사용자의 이메일
-    private String name; // 생성할 채팅방의 이름
+    private String token;
+    private String goodsId;
 }
