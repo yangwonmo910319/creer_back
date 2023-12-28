@@ -18,7 +18,7 @@ public class ChatRoom {
     @Column(name = "room_id")
     @GeneratedValue
     private Long id;
-    private String name;
+    private String name; // 채팅방 이름
     private LocalDateTime regDate;
 
     // Q. Set<Member> 과 Set<Long> 중 뭐가 나을까?

@@ -14,7 +14,7 @@ public class ModelMapperConfig {
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
 
-        // ChatMessage에서 ChatMessageDto로의 명시적인 매핑 설정 추가
+        // ChatMessage 에서 ChatMessageDto 로의 명시적인 매핑 설정 추가
         modelMapper.typeMap(ChatMessage.class, ChatMessageDto.class)
                 .addMapping(src -> src.getChatRoom().getId().toString(), ChatMessageDto::setChatRoom);
 

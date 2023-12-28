@@ -3,7 +3,6 @@ package com.team.creer_back.controller.chat;
 import com.team.creer_back.dto.chat.ChatMessageDto;
 import com.team.creer_back.dto.chat.ChatRoomReqDto;
 import com.team.creer_back.dto.chat.ChatRoomResDto;
-import com.team.creer_back.entity.chat.ChatRoom;
 import com.team.creer_back.service.chat.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,8 @@ public class ChatController {
 
     // 모든 채팅방의 목록 반환
     @GetMapping("/list")
-    public ResponseEntity<List<ChatRoom>> findAllRoom() {
-        List<ChatRoom> rooms = chatService.findAllRoom();
-        return ResponseEntity.ok(rooms);
+    public ResponseEntity<List<ChatRoomResDto>> findAllRoom() {
+        return ResponseEntity.ok(chatService.findAllRoom());
     }
 
     // 방 정보 가져오기

@@ -12,8 +12,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket // 웹소켓
 
 /*
-기존의 REST API 는 클라이언트가 서버에 데이터를 요청하고, 서버가 응답을 반환하는 단방향 통신이다.
-Web Socket 은 양방향 통신으로, 클라이언트가 WebSocket 프로토콜을 통해 서버에 요청을 하면, 즉 메시지를 보내면, 서버가 WebSocketHandler 를 통해 메서지를 수신 및 처리한다.
+클라이언트가 웹소켓 서버의 엔드 포인트에 접근을 시도하는 순간, 웹소켓 연결이 시작되게 된다.
+단방향 통신이던 Rest Api 와는 다르게 웹소켓 통신은 양방향이고, 한번 연결이 성공하면, 서버나 클라이언트 둘 중 하나가 연결을 종료할 때까지 연결이 유지된다.
 */
 
 public class WebSocketConfig implements WebSocketConfigurer {
@@ -30,9 +30,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
     // 아래 코드는 웹소켓 핸들러를 특정 엔드 포인트에 연결 후, 모든 도메인에서의 접속을 허용한다.
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry){
         registry.addHandler(webSocketHandler, "/ws/chat").setAllowedOrigins("*");
+
     }
 }
 
 // 즉, 해당 클래스는 웹 소켓 서버를 설정하고,
 // 클라이언트의 웹 소켓 연결을 처리할 핸들러를 등록하는 역할을 수행한다.
 // 이를 통해 클라이언트와 서버 간의 실시간 양방향 통신이 가능하다.
+
+/*
+웹소켓에서 엔드 포인트는 일종의 라우터 역할을 수행한다.
+웹소켓 연결 요청이 서버에 도달했을 때, 이 엔드포인트는 해당 요청을 적절한 웹소켓 핸들러로 라우팅하는 역할을 한다.
+이렇게 웹소켓 핸들러가 연결 요청을 받게 되면, 이후의 웹소켓 통신을 해당 핸들러가 처리하게 된다.
+*/

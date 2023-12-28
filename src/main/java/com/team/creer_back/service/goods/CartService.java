@@ -51,12 +51,11 @@ public class CartService {
                     .goodsImg(cartDto.getGoodsImg())
                     .price(cartDto.getPrice())
                     .build();
-            Cart cart1 =      cartRepository.save(cart);
 
-            return cart1.getCartId();
+            Cart savedCart = cartRepository.save(cart);
+            return savedCart.getCartId();
         } catch (Exception e) {
-            e.printStackTrace();
-            return 0L;
+            throw new RuntimeException("CartService addToCart 에서 오류가 발생했습니다! : ", e);
         }
     }
 
@@ -88,10 +87,9 @@ public class CartService {
         return modelMapper.map(cart, CartDto.class);
     }
 
-
     // 상품 삭제
     @Transactional
-    public boolean   delete(Long id) {
+    public boolean delete(Long id) {
         try {
             cartRepository.deleteById(id);
             return true;

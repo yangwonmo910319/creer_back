@@ -49,6 +49,5 @@ public class CartController {
     public   ResponseEntity<CartDto> selectGoodsPicture(@PathVariable Long num) {
        CartDto result = cartService.select(num);
         return ResponseEntity.ok(result);
-
     }
 }

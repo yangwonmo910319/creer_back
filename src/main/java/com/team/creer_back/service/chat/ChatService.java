@@ -25,6 +25,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,9 +58,14 @@ public class ChatService {
 
 
     // [1] 채팅방 관리 메서드
-    public List<ChatRoom> findAllRoom() {
-        return chatRoomRepository.findAll();
-    } // [1-1] 모든 채팅방을 탐색
+    // [1-1] 모든 채팅방을 탐색
+    public List<ChatRoomResDto> findAllRoom() {
+        List<ChatRoom> chatRooms = chatRoomRepository.findAll();
+
+        return chatRooms.stream()
+                .map(chatRoom -> modelMapper.map(chatRoom, ChatRoomResDto.class))
+                .collect(Collectors.toList());
+    }
 
     // [1-2] 특정 ID를 가진 채팅방을 탐색
     public ChatRoomResDto findRoomById(Long roomId) throws Exception {
@@ -71,11 +77,12 @@ public class ChatService {
     @Transactional
     public ChatRoomResDto createRoom(Long goodsId, String token) {
         String chatRoomName = goodsRepository.findById(goodsId)
-                .map(goodsDetail -> goodsDetail.getMember().getName()) // GoodsDetail 객체가 존재하면 해당 객체에서 name 을 가져온다.
+                .map(goodsDetail -> goodsDetail.getMember().getNickName()) // GoodsDetail 객체가 존재하면 해당 객체에서 name 을 가져온다.
                 .orElseThrow(() -> new EntityNotFoundException("Goods not found with id: " + goodsId));
 
         ChatRoom chatRoom = ChatRoom.builder()
                 .name(chatRoomName)
+                .regDate(LocalDateTime.now())
                 .build();
 
         return modelMapper.map(chatRoom, ChatRoomResDto.class);
@@ -218,8 +225,8 @@ public class ChatService {
 
     // [3-2] 채팅 메시지가 수신되었을 때의 이벤트를 처리
     @Transactional
-    @EventListener
-    @Async
+    @EventListener // MessageReceivedEvent 타입의 이벤트를 처리 가능, 이벤트는 타입을 통해 매핑된다.
+    @Async // 이벤트 핸들러(Listener)가 이벤트를 처리하는 동안, 이벤트 발행자는 다른 작업을 계속 수행 가능하게 설정
     public void handleMessageReceivedEvent(WebSocketHandler.MessageReceivedEvent event) throws Exception {
         ChatMessageDto chatMessageDto = event.getChatMessage();
         String chatRoomId = chatMessageDto.getChatRoom();
