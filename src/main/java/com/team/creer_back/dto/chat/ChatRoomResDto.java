@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Slf4j
 public class ChatRoomResDto {
-    private String roomId; // 채팅방 Id
+    private String id; // 채팅방 Id
     private String name; // 채팅방 이름
     private LocalDateTime regDate; // 채팅방 등록 일자
 
@@ -28,8 +28,8 @@ public class ChatRoomResDto {
 
     @Builder
     // 다른 클래스에서 ChatRoomResDto 객체를 생성했을 때, 간단하고 편리하게 인자를 넣을 수 있게 해주는 어노테이션이다.
-    public ChatRoomResDto(String roomId, String name, LocalDateTime regDate) {
-        this.roomId = roomId;
+    public ChatRoomResDto(String id, String name, LocalDateTime regDate) {
+        this.id = id;
         this.name = name;
         this.regDate = regDate;
         this.sessionSet = Collections.newSetFromMap(new ConcurrentHashMap<>());

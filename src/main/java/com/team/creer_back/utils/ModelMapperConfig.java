@@ -1,17 +1,23 @@
 package com.team.creer_back.utils;
 
-import com.team.creer_back.dto.goods.CartDto;
-import com.team.creer_back.dto.goods.GoodsDetailDto;
-import com.team.creer_back.entity.goods.Cart;
+
+import com.team.creer_back.dto.chat.ChatMessageDto;
+import com.team.creer_back.entity.chat.ChatMessage;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ModelMapperConfig {
-    // ModelMapper : 자동으로 속성 이름이 같은 필드들을 매핑
+
     @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+
+        // ChatMessage에서 ChatMessageDto로의 명시적인 매핑 설정 추가
+        modelMapper.typeMap(ChatMessage.class, ChatMessageDto.class)
+                .addMapping(src -> src.getChatRoom().getId().toString(), ChatMessageDto::setChatRoom);
+
+        return modelMapper;
     }
 }

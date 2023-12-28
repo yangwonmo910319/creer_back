@@ -19,8 +19,7 @@ public class ChatMessageDto {
     }
 
     private MessageType type; // 메시지의 종류
-    private String roomId; // 채팅방 아이디
+    private String chatRoom; // 채팅방 아이디
     private String sender; // 메시지를 보낸 사용자의 식별 정보
     private String message; // 실제 전송된 메시지의 내용
-
 }

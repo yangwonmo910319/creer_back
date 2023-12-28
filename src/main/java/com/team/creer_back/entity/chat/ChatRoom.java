@@ -21,17 +21,6 @@ public class ChatRoom {
     private String name;
     private LocalDateTime regDate;
 
-    /*
-    // 다대다 관계
-    @ManyToMany(fetch = FetchType.EAGER)
-    // @ManytoMany는 기본값이 (fetch = FetchType.LAZY) 로 설정되어 있다.
-    @JoinTable(
-            name = "chatroom_member", // 관계 테이블의 이름을 설정
-            joinColumns = @JoinColumn(name = "room_id"), // 현재의 엔티티를 참조하는 외래키
-            inverseJoinColumns = @JoinColumn(name = "member_id")) // 반대편 엔티티를 참조하는 외래키
-    private Set<Member> members = new HashSet<>();
-    */
-
     // Q. Set<Member> 과 Set<Long> 중 뭐가 나을까?
     /*
     A. 전자는 Member 엔티티를 직접 참조하기 때문에 직접적인 참조가 가능하며,

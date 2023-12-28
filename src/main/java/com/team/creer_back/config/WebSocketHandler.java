@@ -42,7 +42,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         session.getAttributes().put("memberEmail", chatMessage.getSender());
 
         // 세션과 채팅방 ID를 매핑
-        sessionService.putSession(session, chatMessage.getRoomId());
+        sessionService.putSession(session, chatMessage.getChatRoom());
 
         // 메시지 타입에 따라 해당하는 이벤트를 발행
         if (chatMessage.getType() == ChatMessageDto.MessageType.ENTER) { // 입장
@@ -63,7 +63,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             // 연결 종료 메시지 생성 후 이벤트 발행
             ChatMessageDto chatMessage = new ChatMessageDto();
             chatMessage.setType(ChatMessageDto.MessageType.CLOSE);
-            chatMessage.setRoomId(roomId);
+            chatMessage.setChatRoom(roomId);
             eventPublisher.publishEvent(new SessionDisconnectedEvent(session, chatMessage));
         }
     }
