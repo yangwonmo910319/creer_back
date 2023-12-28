@@ -51,7 +51,9 @@ public class PurchaseService {
             goodsPurchase.setGoodsDetail(goodsDetail);
             goodsPurchase.setOption(goodsPurchaseDto.getOption());
             goodsPurchase.setQuantity(goodsPurchaseDto.getQuantity());
-            goodsPurchase.setStatus("결제 전");
+            goodsPurchase.setStatus("결제 완료");
+            goodsPurchase.setRequirements(goodsPurchaseDto.getRequirements());
+
             purchaseRepository.save(goodsPurchase);
             //재고 - 판매량 == 0 이면 판매중 -> 판매 정지로 변경
             if(goodsDetail.getGoodsStock()-goodsPurchaseDto.getQuantity()==0){
@@ -90,12 +92,6 @@ public class PurchaseService {
 
     @Transactional
     public Boolean updatePurchase(int num,String content) {
-        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
-        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
-
-        log.info(""+num);
-        log.info(content);
-        log.info("updatePurchaseupdatePurchaseupdatePurchaseupdatePurchase");
         try{
             GoodsPurchase goodsPurchase = purchaseRepository.findById((long) num).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
             goodsPurchase.setStatus(content);

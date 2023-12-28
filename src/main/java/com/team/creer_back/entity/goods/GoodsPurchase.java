@@ -42,4 +42,7 @@ public class GoodsPurchase {
 
     @Column(name = "Purchase_status")
     private String status;
+
+    @Column(name = "Purchase_requirements")
+    private String requirements;         //요구 사항
 }

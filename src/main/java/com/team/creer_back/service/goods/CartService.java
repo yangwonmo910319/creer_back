@@ -35,7 +35,7 @@ public class CartService {
 
     // 장바구니에 추가
     @Transactional
-    public boolean addToCart(CartDto cartDto) {
+    public Long addToCart(CartDto cartDto) {
         try {
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
@@ -51,11 +51,12 @@ public class CartService {
                     .goodsImg(cartDto.getGoodsImg())
                     .price(cartDto.getPrice())
                     .build();
-            cartRepository.save(cart);
-            return true;
+            Cart cart1 =      cartRepository.save(cart);
+
+            return cart1.getCartId();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return 0L;
         }
     }
 

@@ -22,8 +22,8 @@ public class CartController {
 
     // 장바구니에 추가
     @PostMapping("/add")
-    public ResponseEntity<Boolean> addToCart(@RequestBody CartDto cartDto){
-        boolean list = cartService.addToCart(cartDto);
+    public ResponseEntity<Long> addToCart(@RequestBody CartDto cartDto){
+        Long list = cartService.addToCart(cartDto);
         return ResponseEntity.ok(list);
     }
 

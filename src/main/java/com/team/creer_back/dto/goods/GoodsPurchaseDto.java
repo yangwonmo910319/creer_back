@@ -19,5 +19,7 @@ public class GoodsPurchaseDto {
     private String option;          //선택한 옵션
     private Long quantity;        //구매 수량
     private String status;         //결재 상태
+    private String requirements;         //요구 사항
+    
 }
 
