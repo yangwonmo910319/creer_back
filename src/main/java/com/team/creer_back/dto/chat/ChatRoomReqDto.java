@@ -14,9 +14,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Slf4j
 public class ChatRoomReqDto {
-    @NotNull(message = "ChatRoomDto token NULL 값이 들어왔습니다!")
-    private String token;
-
     @NotNull(message = "ChatRoomDto goodsId NULL 값이 들어왔습니다!")
     private Long goodsId;
 }

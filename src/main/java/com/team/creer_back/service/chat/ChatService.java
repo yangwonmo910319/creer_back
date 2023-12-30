@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
+
 @Slf4j
 @Transactional(readOnly = true)
 @Service // 채팅 관련 로직을 수행
@@ -75,18 +77,32 @@ public class ChatService {
 
     // [1-3] 새로운 채팅방을 생성하고, 해당 채팅방의 정보를 반환
     @Transactional
-    public ChatRoomResDto createRoom(Long goodsId, String token) {
-        String chatRoomName = goodsRepository.findById(goodsId)
-                .map(goodsDetail -> goodsDetail.getMember().getNickName()) // GoodsDetail 객체가 존재하면 해당 객체에서 name 을 가져온다.
-                .orElseThrow(() -> new EntityNotFoundException("Goods not found with id: " + goodsId));
+    public ChatRoomResDto createRoom(Long goodsId) {
+        Long buyerId = getCurrentMemberId();
+        String chatRoomBuyerName = memberRepository.findById(buyerId)
+                .map(member -> member.getName())
+                .orElseThrow(() -> new EntityNotFoundException("ChatService createRoom buyerId에 NUll 값이 받아와졌습니다!"));
 
-        ChatRoom chatRoom = ChatRoom.builder()
-                .name(chatRoomName)
-                .regDate(LocalDateTime.now())
-                .build();
+        String chatRoomSellerName = goodsRepository.findById(goodsId)
+                .map(goodsDetail -> goodsDetail.getMember().getNickName())
+                .orElseThrow(() -> new EntityNotFoundException("ChatService createRoom goodsId에 NUll 값이 받아와졌습니다!"));
+
+        String chatRoomName = chatRoomSellerName + "님과 " + chatRoomBuyerName + "님의 채팅방";
+
+        // 해당 이름의 채팅방이 이미 존재한다면,
+        ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
+        if(chatRoom == null) {
+            chatRoom = ChatRoom.builder()
+                    .name(chatRoomName)
+                    .regDate(LocalDateTime.now())
+                    .build();
+
+            chatRoom = chatRoomRepository.save(chatRoom); // 수정과 같이 변경 감지가 아닌 경우에는 필수
+        }
 
         return modelMapper.map(chatRoom, ChatRoomResDto.class);
     }
+
 
     // [1-4] 이전 채팅 로그를 호출
     public List<ChatMessageDto> getPreviousMessages(Long roomId) {

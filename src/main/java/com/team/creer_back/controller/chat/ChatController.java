@@ -26,7 +26,7 @@ public class ChatController {
     // 채팅방 생성
     @PostMapping("/new")
     public ResponseEntity<String> createRoom(@Valid @RequestBody ChatRoomReqDto chatRoomReqDto) {
-        ChatRoomResDto chatRoomResDto = chatService.createRoom(chatRoomReqDto.getGoodsId(), chatRoomReqDto.getToken());
+        ChatRoomResDto chatRoomResDto = chatService.createRoom(chatRoomReqDto.getGoodsId());
         return ResponseEntity.ok(chatRoomResDto.getName()); // ok : 정적 메서드
     }
 
