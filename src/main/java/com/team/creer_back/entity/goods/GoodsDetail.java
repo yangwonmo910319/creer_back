@@ -37,7 +37,7 @@ public class GoodsDetail {
     private String goodsStatus;    // 현재 판매 상태
 
     //게시글 삭제시 리뷰도 함께 삭제
-    @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsReview> reviews;
 
     //게시글 삭제시  사진도 함께 삭제
