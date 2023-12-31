@@ -40,7 +40,7 @@ public class WebSocketHandler extends TextWebSocketHandler { // afterConnectionE
 
         // 세션에 발신자의 식별자를 저장
         if(chatMessage.getSender() != null) {
-            session.getAttributes().put("memberEmail", chatMessage.getSender());
+            session.getAttributes().put("senderName", chatMessage.getSender());
         }
         else{
             log.error("WebSocketHandler handleTextMessage chatMessage.getSender() 의 값이 NULL 입니다.!");

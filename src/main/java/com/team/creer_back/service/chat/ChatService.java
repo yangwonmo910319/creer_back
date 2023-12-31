@@ -26,6 +26,7 @@ import org.springframework.web.socket.WebSocketSession;
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,11 +109,16 @@ public class ChatService {
     public List<ChatMessageDto> getPreviousMessages(Long roomId) {
         List<ChatMessage> chatMessages = chatMessageRepository.findByChatRoom_IdWithSender(roomId);
 
-        return chatMessages.stream()
-                .map(chatMessage -> modelMapper.map(chatMessage, ChatMessageDto.class))
-                .collect(Collectors.toList());
+        if (chatMessages != null) {
+            return chatMessages.stream()
+                    .map(chatMessage -> modelMapper.map(chatMessage, ChatMessageDto.class))
+                    .collect(Collectors.toList());
+        } else {
+            // 만약 채팅 로그가 없을 경우,
+            log.warn("불러올 채팅 로그가 존재하지 않습니다!");
+            return Collections.emptyList(); // 빈 리스트 반환 예시
+        }
     }
-
     // [1-5] 채팅방을 삭제
     @Transactional
     public void removeRoom(Long roomId) {
@@ -222,27 +228,28 @@ public class ChatService {
     // [3] 이벤트 핸들러 관련 메서드
     // [3-1] 새로운 세션이 채팅방에 입장했을 때의 이벤트를 처리
     @Transactional
-    @EventListener // 이벤트 처리
-    @Async
+    @EventListener // SessionEnteredEvent 타입의 이벤트를 처리 가능, 이벤트는 타입을 통해 매핑된다.
+    @Async // 이벤트 핸들러(Listener)가 이벤트를 처리하는 동안, 이벤트 발행자는 다른 작업을 계속 수행 가능하게 설정
     public void handleSessionEnteredEvent(WebSocketHandler.SessionEnteredEvent event) throws Exception {
         WebSocketSession session = event.getSession();
         ChatMessageDto chatMessageDto = event.getChatMessage();
         String roomId = chatMessageDto.getChatRoom(); // ChatRoom의 ID를 탐색
-        String memberEmail = (String) session.getAttributes().get("memberEmail");
+        String senderName = (String) session.getAttributes().get("senderName");
 
-        Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+        Member member = memberRepository.findByEmail(senderName).orElseThrow(
                 () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
         );
 
         Long memberId = member.getId();
         log.warn("로그 찍어보기" + memberId + ", 룸 아이디는 " + roomId);
+
         addSessionAndHandleEnter(Long.valueOf(roomId), session, memberId, chatMessageDto);
     }
 
     // [3-2] 채팅 메시지가 수신되었을 때의 이벤트를 처리
     @Transactional
-    @EventListener // MessageReceivedEvent 타입의 이벤트를 처리 가능, 이벤트는 타입을 통해 매핑된다.
-    @Async // 이벤트 핸들러(Listener)가 이벤트를 처리하는 동안, 이벤트 발행자는 다른 작업을 계속 수행 가능하게 설정
+    @EventListener
+    @Async
     public void handleMessageReceivedEvent(WebSocketHandler.MessageReceivedEvent event) throws Exception {
         ChatMessageDto chatMessageDto = event.getChatMessage();
         String chatRoomId = chatMessageDto.getChatRoom();

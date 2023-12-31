@@ -11,6 +11,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ChatMessage {
     @Id
     @Column(name = "message_id")
