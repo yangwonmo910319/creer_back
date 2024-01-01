@@ -27,7 +27,7 @@ public class ChatController {
     @PostMapping("/new")
     public ResponseEntity<String> createRoom(@Valid @RequestBody ChatRoomReqDto chatRoomReqDto) {
         ChatRoomResDto chatRoomResDto = chatService.createRoom(chatRoomReqDto.getGoodsId());
-        return ResponseEntity.ok(chatRoomResDto.getName()); // ok : 정적 메서드
+        return ResponseEntity.ok(chatRoomResDto.getId()); // ok : 정적 메서드
     }
 
     // 모든 채팅방의 목록 반환
@@ -37,12 +37,15 @@ public class ChatController {
     }
 
     // 방 정보 가져오기
-    @GetMapping("/room/{roomId}")
+    @GetMapping("/{roomId}")
     public ResponseEntity<ChatRoomResDto> findRoomById(@PathVariable Long roomId) throws Exception {
         ChatRoomResDto room = chatService.findRoomById(roomId);
+
         if (room != null) {
+            log.warn("findRoomById : " + room);
             return ResponseEntity.ok(room);
         } else {
+            log.warn("findRoomById Error Null : " + room);
             return ResponseEntity.notFound().build();
         }
     }

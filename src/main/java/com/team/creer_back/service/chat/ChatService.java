@@ -73,6 +73,7 @@ public class ChatService {
     // [1-2] 특정 ID를 가진 채팅방을 탐색
     public ChatRoomResDto findRoomById(Long roomId) throws Exception {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new Exception("ChatService findRoomById NULL 값이 들어왔습니다!"));
+        log.warn("ㅋㅋㅋ: " + chatRoom.getName());
         return modelMapper.map(chatRoom, ChatRoomResDto.class);
     }
 
@@ -92,7 +93,7 @@ public class ChatService {
 
         // 해당 이름의 채팅방이 이미 존재한다면,
         ChatRoom chatRoom = chatRoomRepository.findByName(chatRoomName);
-        if(chatRoom == null) {
+        if (chatRoom == null) {
             chatRoom = ChatRoom.builder()
                     .name(chatRoomName)
                     .regDate(LocalDateTime.now())
@@ -119,6 +120,7 @@ public class ChatService {
             return Collections.emptyList(); // 빈 리스트 반환 예시
         }
     }
+
     // [1-5] 채팅방을 삭제
     @Transactional
     public void removeRoom(Long roomId) {
@@ -152,14 +154,20 @@ public class ChatService {
                     chatMessageDto.setSender(existingMember.getMember().getName());
                 }
             }
+
             if (chatMessageDto.getSender() != null) {
                 chatMessageDto.setMessage(chatMessageDto.getSender() + "님이 입장했습니다.");
-                ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setType(ChatMessage.MessageType.ENTER);
-                chatMessage.setMessage(chatMessageDto.getMessage());
-                chatMessage.setChatRoom(chatRoom);
-                chatMessage.setSender(memberRepository.findByName(chatMessageDto.getSender()).orElse(null));
+
+                ChatMessage chatMessage = ChatMessage.builder()
+                        .type(ChatMessage.MessageType.ENTER)
+                        .message(chatMessageDto.getMessage())
+                        .chatRoom(chatRoom)
+                        .sender(memberRepository.findByName(chatMessageDto.getSender()).orElse(null))
+                        .build();
+
+                chatMessageRepository.save(chatMessage);
             }
+
             log.debug("New session added: " + session);
         }
     }
@@ -167,35 +175,34 @@ public class ChatService {
     // [2-2] 채팅방에서 퇴장한 세션을 제거하고 퇴장 메시지를 전송
     @Transactional
     public void removeSessionAndHandleExit(Long roomId, WebSocketSession session, ChatMessageDto chatMessageDto) throws Exception {
-        // ChatRoom room = findRoomById(roomId);
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new Exception("ChatService removeSessionAndHandleExit에서 NULL 값이 들어왔습니다."));
-        if (chatRoom != null) {
-            // 세션에서 memberId를 가져옵니다.
-            Long memberId = (Long) session.getAttributes().get("memberId");
-            Member member = memberRepository.findById(memberId).orElse(null);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new Exception("ChatService removeSessionAndHandleExit에서 NULL 값이 들어왔습니다."));
 
-            if (member != null) {
-                // ChatRoomMember에서 해당 Member를 찾아서 삭제
-                ChatRoomMember chatRoomMember = chatRoomMemberRepository.findByChatRoomAndMember(chatRoom, member);
-                if (chatRoomMember != null) {
-                    chatRoomMemberRepository.delete(chatRoomMember);
-                }
+        Long memberId = (Long) session.getAttributes().get("memberId");
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new Exception("Member not found for Member ID: " + memberId));
 
-                chatMessageDto.setMessage(member.getName() + "님이 퇴장했습니다.");
-
-                ChatMessage chatMessage = new ChatMessage();
-                chatMessage.setType(ChatMessage.MessageType.CLOSE);
-                chatMessage.setMessage(chatMessageDto.getMessage());
-                chatMessage.setChatRoom(chatRoom);
-                chatMessage.setSender(member);
-
-                sendMessageToAll(roomId, chatMessageDto); // this 사용시 트랙잭션이 작동하지 않을 수도 있다.
-                log.debug("Member removed: " + member.getName());
-            } else {
-                log.debug("Member not found for Member ID: " + memberId);
-            }
+        // ChatRoomMember에서 해당 Member를 찾아서 삭제
+        ChatRoomMember chatRoomMember = chatRoomMemberRepository.findByChatRoomAndMember(chatRoom, member);
+        if (chatRoomMember != null) {
+            chatRoomMemberRepository.delete(chatRoomMember);
         }
+
+        chatMessageDto.setMessage(member.getName() + "님이 퇴장했습니다.");
+
+        ChatMessage chatMessage = ChatMessage.builder()
+                .type(ChatMessage.MessageType.CLOSE)
+                .message(chatMessageDto.getMessage())
+                .chatRoom(chatRoom)
+                .sender(member)
+                .build();
+
+        chatMessageRepository.save(chatMessage);
+
+        sendMessageToAll(roomId, chatMessageDto);
+        log.debug("Member removed: " + member.getName());
     }
+
 
     // [2-3] 웹소켓 세션에 메시지를 전송
     @Transactional
