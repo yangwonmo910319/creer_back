@@ -37,8 +37,6 @@ public class AuctionController {
           Long num = goodsService.insertGoods(goodsDetail);
         String isoDateTimeString = auctionTime; // 클라이언트에서 전송한 ISO 8601 형식의 문자열
         LocalDateTime dateTime = LocalDateTime.parse(isoDateTimeString, DateTimeFormatter.ISO_DATE_TIME);
-
-
         Boolean list = goodsAution.insertAuction(num,dateTime);
         return ResponseEntity.ok(true);
     }

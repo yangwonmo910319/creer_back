@@ -42,6 +42,9 @@ public class AuctionService {
             LocalDateTime auctionDate = auctionTime;
             goodsAution.setAuctionDate(auctionDate);
             auctionRepository.save(goodsAution);
+
+            goodsDetail.setGoodsStatus("auction");
+            goodsRepository.save(goodsDetail);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

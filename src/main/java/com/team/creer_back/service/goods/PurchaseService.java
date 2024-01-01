@@ -53,7 +53,9 @@ public class PurchaseService {
             goodsPurchase.setQuantity(goodsPurchaseDto.getQuantity());
             goodsPurchase.setStatus("결제 완료");
             goodsPurchase.setRequirements(goodsPurchaseDto.getRequirements());
-
+            goodsPurchase.setReceiveName(goodsPurchaseDto.getReceiveName());
+            goodsPurchase.setReceiveAdd(goodsPurchaseDto.getReceiveAdd());
+            goodsPurchase.setReceiveNumber(goodsPurchaseDto.getReceiveNumber());
             purchaseRepository.save(goodsPurchase);
             //재고 - 판매량 == 0 이면 판매중 -> 판매 정지로 변경
             if(goodsDetail.getGoodsStock()-goodsPurchaseDto.getQuantity()==0){

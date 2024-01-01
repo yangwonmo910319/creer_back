@@ -14,12 +14,14 @@ import org.springframework.stereotype.Component;
 public class GoodsPurchaseDto {
     private Long id;
     private MemberDto buyer;  //구매자
-    private MemberDto seller;             //판매자
     private Long goodsDetailId;//상품PK
     private String option;          //선택한 옵션
     private Long quantity;        //구매 수량
     private String status;         //결재 상태
     private String requirements;         //요구 사항
-    
+    private String receiveName;         //받는 사람
+    private String receiveAdd;       //받는 주소
+    private String receiveNumber;          //받는 번호
+
 }
 

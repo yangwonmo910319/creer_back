@@ -45,4 +45,32 @@ public class GoodsPurchase {
 
     @Column(name = "Purchase_requirements")
     private String requirements;         //요구 사항
+
+    @Column(name = "Purchase_name")
+    private String receiveName;
+
+
+    @Column(name = "Purchase_add")
+    private String receiveAdd;
+
+    @Column(name = "Purchase_number")
+    private String receiveNumber;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
