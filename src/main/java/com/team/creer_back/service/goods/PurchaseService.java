@@ -1,6 +1,7 @@
 package com.team.creer_back.service.goods;
 
 
+import com.team.creer_back.dto.goods.GoodsDetailDto;
 import com.team.creer_back.dto.goods.GoodsPurchaseDto;
 import com.team.creer_back.entity.goods.GoodsDetail;
 import com.team.creer_back.entity.goods.GoodsPurchase;
@@ -27,7 +28,7 @@ public class PurchaseService {
     private final MemberRepository memberRepository;
     private final PurchaseRepository purchaseRepository;
     private final ModelMapper modelMapper;
-
+    private GoodsDetailDto goodsDetailDto;
     @Autowired
     public PurchaseService(GoodsRepository goodsRepository, MemberRepository memberRepository, PurchaseRepository purchaseRepository, ModelMapper modelMapper) {
         this.goodsRepository = goodsRepository;
@@ -38,12 +39,15 @@ public class PurchaseService {
 
     //구매 등록
     @Transactional
-    public Boolean insertPurchase(GoodsPurchaseDto goodsPurchaseDto) {
+    public Boolean insertPurchase(Long num,GoodsPurchaseDto goodsPurchaseDto) {
         try{
             GoodsPurchase goodsPurchase = new GoodsPurchase();
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다"));
-            GoodsDetail goodsDetail = goodsRepository.findById(goodsPurchaseDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+
+
+
+            GoodsDetail goodsDetail = goodsRepository.findById(num).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
             Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("판매자 아이디가 없습니다"));
 
             goodsPurchase.setBuyer(buyer);
@@ -73,7 +77,7 @@ public class PurchaseService {
     }
 
    //판매 목록 출력
-    public List<GoodsPurchaseDto> selectBuyer() {
+    public List<GoodsPurchaseDto> selectSeller() {
         Long memberId = getCurrentMemberId(); // 로그인 아이디
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findBySellerId(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
@@ -82,16 +86,21 @@ public class PurchaseService {
                 .collect(Collectors.toList());
     }
     //구매(장바구니) 목록 출력
-    public List<GoodsPurchaseDto> selectSeller() {
+    public List<GoodsPurchaseDto> selectBuyer() {
         Long memberId = getCurrentMemberId(); // 구매자
         List<GoodsPurchase> goodsPurchases = purchaseRepository.findByBuyerId(memberId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
+
         return goodsPurchases.stream()
-                .map(goodsPurchase -> modelMapper.map(goodsPurchase, GoodsPurchaseDto.class))
+                .map(goodsPurchase -> {
+                    GoodsPurchaseDto purchaseDto = modelMapper.map(goodsPurchase, GoodsPurchaseDto.class);
+                    GoodsDetail goodsDetail = goodsPurchase.getGoodsDetail(); // GoodsDetail 가져오기
+                    GoodsDetailDto goodsDetailDto = modelMapper.map(goodsDetail, GoodsDetailDto.class); // GoodsDetail을 GoodsDetailDto로 매핑
+                    purchaseDto.setGoodsDetailId(goodsDetailDto); // GoodsDetailDto를 GoodsPurchaseDto에 설정
+                    return purchaseDto;
+                })
                 .collect(Collectors.toList());
     }
-
-
     @Transactional
     public Boolean updatePurchase(int num,String content) {
         try{

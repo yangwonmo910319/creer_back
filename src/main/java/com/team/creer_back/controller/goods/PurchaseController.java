@@ -19,8 +19,8 @@ public  class PurchaseController {
 
     //구매 목록 등록
     @PostMapping("/new")
-    public ResponseEntity<Boolean> insertPicture(@RequestBody GoodsPurchaseDto goodsPurchaseDto) {
-        boolean list = purchaseService.insertPurchase(goodsPurchaseDto);
+    public ResponseEntity<Boolean> insertPicture(@RequestParam Long num ,@RequestBody GoodsPurchaseDto goodsPurchaseDto) {
+        boolean list = purchaseService.insertPurchase(num,goodsPurchaseDto);
         return ResponseEntity.ok(list);
     }
 
@@ -30,15 +30,14 @@ public  class PurchaseController {
         boolean list = purchaseService.updatePurchase(id,content);
         return ResponseEntity.ok(list);
     }
-
-    //판매 목록 출력
-    @GetMapping("/list")
+    //판매 구매 출력
+    @GetMapping("/buy")
     public ResponseEntity<List<GoodsPurchaseDto>> selectBuyer() {
         List<GoodsPurchaseDto> list = purchaseService.selectBuyer();
         return ResponseEntity.ok(list);
     }
-    //판매 구매 출력
-    @GetMapping("/cart")
+    //판매 목록 출력
+    @GetMapping("/seller")
     public ResponseEntity<List<GoodsPurchaseDto>> selectSeller() {
         List<GoodsPurchaseDto> list = purchaseService.selectSeller();
         return ResponseEntity.ok(list);

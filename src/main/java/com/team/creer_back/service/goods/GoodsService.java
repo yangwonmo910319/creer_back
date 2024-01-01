@@ -296,7 +296,7 @@ public class GoodsService {
 
 
             goodsPurchaseDto.setId(goodsPurchase.getId());
-            goodsPurchaseDto.setGoodsDetailId(goodsPurchase.getId());
+            goodsPurchaseDto.setGoodsDetailId(goodsDetailDto);
             goodsPurchaseDto.setOption(goodsPurchase.getOption());
             goodsPurchaseDto.setQuantity(goodsPurchase.getQuantity());
             goodsPurchaseDto.setStatus(goodsPurchase.getStatus());
