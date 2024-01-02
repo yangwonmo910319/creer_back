@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,7 @@ public class GoodsDetail {
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
     private String goodsStatus;    // 현재 판매 상태
-
+    private LocalDateTime auctionDate;   // 경매 날,시간
     //게시글 삭제시 리뷰도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)
     private List<GoodsReview> reviews;

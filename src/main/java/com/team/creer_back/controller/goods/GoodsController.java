@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -59,11 +61,29 @@ public class GoodsController {
     }
 
     // 상품 등록
-    @PostMapping("/new")
-    public ResponseEntity<Long> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto) {
-        Long list = goodsService.insertGoods(goodsDetailDto);
+    @PostMapping("/new/{auctionTime}")
+    public ResponseEntity<Long> insertGoods(@RequestBody GoodsDetailDto goodsDetailDto ,@PathVariable String auctionTime) {
+        Long list = goodsService.insertGoods(goodsDetailDto,auctionTime);
         return ResponseEntity.ok(list);
     }
+
+    // 경매 전체 조회
+    @GetMapping("/auction")
+    public ResponseEntity<List<GoodsDetailDto>> auctionList() {
+        List<GoodsDetailDto> list = goodsService.getAuctionList();
+        return ResponseEntity.ok(list);
+    }
+
+    //경배 금액 변경
+    @PostMapping("/auctionPrice")
+    public ResponseEntity<Boolean> update(@RequestParam int id,@RequestParam int price) {
+        boolean list = goodsService.updatePrice(id,price);
+        return ResponseEntity.ok(list);
+    }
+
+
+
+
 
     // 상품 이미지 등록
     @PostMapping("/new/picture")

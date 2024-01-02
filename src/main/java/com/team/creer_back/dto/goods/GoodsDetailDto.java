@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Lob;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class GoodsDetailDto {
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
     private String goodsStatus;    // 현재 판매 상태
+    private LocalDateTime auctionDate;   // 경매 날,시간
     private List<GoodsReviewDto> reviews;  // 모든 리뷰
     private List<GoodsOptionDto> options; // 모든 옵션
     private List<GoodsPurchaseDto> purchase; // 모든 구매 목록

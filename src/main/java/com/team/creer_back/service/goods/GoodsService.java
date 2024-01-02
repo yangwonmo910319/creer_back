@@ -20,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +59,8 @@ public class GoodsService {
     }
 
 
+
+
     // 상품 필터 조회
     public List<GoodsDetailDto> tagGoods(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
@@ -89,15 +94,29 @@ public class GoodsService {
             return false;
         }
     }
+    // 경매 목록 조회
+    public List<GoodsDetailDto> getAuctionList( ) {
+        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsStatusContaining("auction");
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
 
-//    // 상품 한개 조회
-//    public GoodsDetailDto getGoods(Long id) {
-//        GoodsDetail goodsDetail = goodsRepository.findById(id).orElseThrow(
-//                () -> new RuntimeException("해당 글이 존재하지 않습니다.")
-//        );
-//
-//        return goodsEntityToDto(goodsDetail);
-//    }
+        for (GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+        }
+        return goodsDetailDtos;
+
+    }
+    @Transactional
+    public Boolean updatePrice(int id,int price) {
+        try{
+            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
+            goodsDetail.setGoodsPrice((long) price);
+            goodsRepository.save(goodsDetail);
+            return true;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public GoodsDetailDto getGoods(Long goodsId) {
         GoodsDetail goodsDetail = goodsRepository.findById(goodsId)
@@ -112,6 +131,7 @@ public class GoodsService {
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());
         goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());
+        goodsDetailDto.setAuctionDate(goodsDetail.getAuctionDate());
         //작성자(판매자) 정보
         Member member = goodsDetail.getMember();
         MemberDto memberDto = new MemberDto();
@@ -158,15 +178,15 @@ public class GoodsService {
 
     // 상품 등록
     @Transactional
-    public Long insertGoods(GoodsDetailDto goodsDetailDto) {
+    public Long insertGoods(GoodsDetailDto goodsDetailDto ,String  auctionTime) {
+
+
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
             Long memberId = getCurrentMemberId();
             Member member = memberRepository.findById(memberId).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
-
-//            goodsDetail.setGoodsDetailId(goodsDetailDto.getGoodsDetailId());
             goodsDetail.setGoodsCategory(goodsDetailDto.getGoodsCategory());
             goodsDetail.setGoodsPic(goodsDetailDto.getGoodsPic());
             goodsDetail.setGoodsDesc(goodsDetailDto.getGoodsDesc());
@@ -175,8 +195,17 @@ public class GoodsService {
             goodsDetail.setGoodsPrice(goodsDetailDto.getGoodsPrice());
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setGoodsStatus(goodsDetailDto.getGoodsStatus());
+            try {
+                String isoDateTimeString = auctionTime; // 클라이언트에서 전송한 ISO 8601 형식의 문자열
+                LocalDateTime dateTime = LocalDateTime.parse(isoDateTimeString, DateTimeFormatter.ISO_DATE_TIME);
+                goodsDetail.setAuctionDate(dateTime);
+                goodsDetail.setGoodsStock(1L);
+                // 변환된 날짜와 시간을 사용하는 코드
+            } catch (DateTimeParseException e) {
+                // 오류 처리
+                e.printStackTrace();
+            }
             goodsDetail.setMember(member);
-//            goodsRepository.save(goodsDetail);
             GoodsDetail savedGoodsDetail = goodsRepository.save(goodsDetail);
 
             return savedGoodsDetail.getGoodsDetailId();
@@ -232,10 +261,12 @@ public class GoodsService {
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());
+        goodsDetailDto.setAuctionDate(goodsDetail.getAuctionDate());
         Member member = goodsDetail.getMember();
         memberDto.setImage(member.getImage());//판매자 사진
         memberDto.setNickName(member.getNickName());//판매자 닉네임
         goodsDetailDto.setMemberDto(memberDto);
+
         return goodsDetailDto;
     }
 

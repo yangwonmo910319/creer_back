@@ -14,5 +14,6 @@ public interface GoodsRepository extends JpaRepository<GoodsDetail, Long> {
     Page<GoodsDetail> findAll(Pageable pageable);   // 전체 조회
     List<GoodsDetail> findBygoodsTitleContaining(String keyword);  //글 제목 검색
     List<GoodsDetail> findBygoodsCategoryContaining(String keyword);  //글 테그 검색
+    List<GoodsDetail> findBygoodsStatusContaining(String keyword);  //글 테그 검색
     List<GoodsDetail> findByMemberId(Long memberId);
 }
