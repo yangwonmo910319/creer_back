@@ -48,8 +48,7 @@ public class MemberController {
     }
 
 
-    // Kakao
-    // 카카오 로그인
+    // 카카오 회원가입 및 로그인
     @PostMapping("/kakaoLogin")
     public ResponseEntity<TokenDto> kakaoLogin(@RequestBody Map<String, Object> kakaoData) throws JSONException, JsonProcessingException {
         // @RequestBody : Http 요청 본문을 Map<String, Object> 형태로 파싱하여 kakaoData 라는 변수에 저장하고 있으며, 해당 어노테이션은 Http 요청 본문을 자바 객체로 변환할 때 사용한다.
