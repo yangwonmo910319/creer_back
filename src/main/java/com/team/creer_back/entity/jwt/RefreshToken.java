@@ -16,6 +16,7 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Lob
     @Column(name = "refresh_token", unique = true) // 고유 값으로 설정
     private String refreshToken;
 

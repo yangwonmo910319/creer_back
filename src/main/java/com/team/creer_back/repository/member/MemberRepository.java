@@ -1,6 +1,7 @@
 package com.team.creer_back.repository.member;
 
 
+import com.team.creer_back.constant.Authority;
 import com.team.creer_back.entity.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     boolean existsByEmail(String email);
     Optional<Member> findByEmailAndPassword(String email, String password);
     boolean existsByNickName(String nickName);
-    Optional<Member> findByNickName(String nickName);
+    Optional<Member> findByNickName(String NickName);
     Optional<Member> findByName(String name);
 }
