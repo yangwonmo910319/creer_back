@@ -24,7 +24,8 @@ public class GoodsDetail {
     private String goodsCategory;       // 카테고리
     @Lob
     private String goodsPic;            // 상품 사진
-    @Column(length = 1000)
+
+    @Lob
     private String goodsDesc;            // 상품 설명
     private Long goodsStock;         // 상품 재고
     private String goodsTitle;          // 상품 이름

@@ -1,6 +1,5 @@
 package com.team.creer_back.service.member;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team.creer_back.constant.Authority;
