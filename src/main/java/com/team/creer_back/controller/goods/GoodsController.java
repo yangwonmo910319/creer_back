@@ -143,7 +143,7 @@ public class GoodsController {
     public ResponseEntity<Boolean> goodsInsert(@RequestBody List<Map<String, String>> goodsList) {
         log.info("movieList : {}", goodsList);
         Member member = new Member();
-        member.setId(Long.valueOf(11)); // 직접 지정
+        member.setId(Long.valueOf(1)); // 직접 지정
         for (Map<String, String> data : goodsList) {
             GoodsDetail goodsDetail = new GoodsDetail();
             goodsDetail.setGoodsCategory("뷰티");
