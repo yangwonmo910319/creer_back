@@ -6,6 +6,7 @@ import com.team.creer_back.entity.goods.GoodsDetail;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.service.goods.GoodsService;
 import com.team.creer_back.service.goods.PictureService;
+import com.team.creer_back.service.goods.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GoodsController {
     private final GoodsService goodsService; // 생성자를 통해서 값을 참조할 수 있음
-    private final PictureService pictureService; // 생성자를 통해서 값을 참조할 수 있음
+    private final PictureService pictureService;
+    private final PurchaseService purchaseService;
 
     // 상품 태그 조회
     @GetMapping("/list/tag")
@@ -56,7 +58,7 @@ public class GoodsController {
     // 내가 등록한 상품만 조회
     @GetMapping("/Mylist")
     public ResponseEntity<List<GoodsDetailDto>> getMyGoods() {
-        List<GoodsDetailDto> list = goodsService.getMyGoods();
+   List<GoodsDetailDto> list = goodsService.getMyGoods();
         return ResponseEntity.ok(list);
     }
 
@@ -80,9 +82,6 @@ public class GoodsController {
         boolean list = goodsService.updatePrice(id,price);
         return ResponseEntity.ok(list);
     }
-
-
-
 
 
     // 상품 이미지 등록
@@ -146,7 +145,7 @@ public class GoodsController {
         member.setId(Long.valueOf(1)); // 직접 지정
         for (Map<String, String> data : goodsList) {
             GoodsDetail goodsDetail = new GoodsDetail();
-            goodsDetail.setGoodsCategory("뷰티");
+            goodsDetail.setGoodsCategory("쥬얼리");
             goodsDetail.setGoodsPic(data.get("image"));
             goodsDetail.setGoodsDesc("");
             goodsDetail.setGoodsStock(1000L);

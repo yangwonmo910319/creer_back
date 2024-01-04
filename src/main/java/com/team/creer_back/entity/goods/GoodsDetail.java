@@ -1,5 +1,6 @@
 package com.team.creer_back.entity.goods;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team.creer_back.entity.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,7 @@ public class GoodsDetail {
     private Long goodsPrice;          // 상품 가격
     private String goodsDeliveryFee;    // 배달비
     private String goodsStatus;    // 현재 판매 상태
+    @JsonIgnore
     private LocalDateTime auctionDate;   // 경매 날,시간
     //게시글 삭제시 리뷰도 함께 삭제
     @OneToMany(mappedBy = "goodsDetail", cascade = CascadeType.REMOVE)

@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.Lob;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Getter
@@ -29,4 +30,6 @@ public class GoodsDetailDto {
     private List<GoodsReviewDto> reviews;  // 모든 리뷰
     private List<GoodsOptionDto> options; // 모든 옵션
     private List<GoodsPurchaseDto> purchase; // 모든 구매 목록
+
+
 }

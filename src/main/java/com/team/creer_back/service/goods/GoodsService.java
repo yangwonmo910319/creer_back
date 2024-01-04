@@ -12,9 +12,12 @@ import com.team.creer_back.entity.goods.GoodsPurchase;
 import com.team.creer_back.entity.goods.GoodsReview;
 import com.team.creer_back.entity.member.Member;
 import com.team.creer_back.repository.goods.GoodsRepository;
+import com.team.creer_back.repository.goods.PurchaseRepository;
 import com.team.creer_back.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,18 +27,31 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.team.creer_back.security.SecurityUtil.getCurrentMemberId;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GoodsService {
     private final GoodsRepository goodsRepository;
     private final MemberRepository memberRepository;
+    private final PurchaseRepository purchaseRepository;
+    private final ModelMapper modelMapper;
 
+    @Autowired
+    public GoodsService(GoodsRepository goodsRepository, MemberRepository memberRepository,
+                        PurchaseRepository purchaseRepository, ModelMapper modelMapper) {
+        this.goodsRepository = goodsRepository;
+        this.memberRepository = memberRepository;
+        this.purchaseRepository = purchaseRepository;
+        this.modelMapper = modelMapper;
+    }
     // 상품 전체 조회
     public List<GoodsDetailDto> getGoodsList() {
         List<GoodsDetail> goodsDetails = goodsRepository.findAll();
@@ -58,6 +74,30 @@ public class GoodsService {
         return goodsDetailDtos;
     }
 
+
+
+    // 구매 목록이 있으면 에러 발생
+//    public List<GoodsDetailDto> MyGoods() {
+//        Long memberId = getCurrentMemberId();
+//        List<GoodsDetail> goodsDetails = goodsRepository.findByMemberId(memberId);
+//
+//        return goodsDetails.stream()
+//                .map(goodsDetail -> {
+//                    GoodsDetailDto goodsDetailDto = modelMapper.map(goodsDetail, GoodsDetailDto.class);
+//
+//                    List<GoodsPurchaseDto> purchasesInfo = goodsDetail.getPurchase().stream()
+//                            .map(goodsPurchase -> {
+//                                GoodsPurchaseDto purchaseDto = modelMapper.map(goodsPurchase, GoodsPurchaseDto.class);
+//                                purchaseDto.setGoodsDetailId(goodsDetailDto);
+//                                return purchaseDto;
+//                            })
+//                            .collect(Collectors.toList());
+//
+//                    goodsDetailDto.setPurchase(purchasesInfo);
+//                    return goodsDetailDto;
+//                })
+//                .collect(Collectors.toList());
+//    }
 
 
 
@@ -108,9 +148,12 @@ public class GoodsService {
     @Transactional
     public Boolean updatePrice(int id,int price) {
         try{
+            Long memberId = getCurrentMemberId();
             GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
             goodsDetail.setGoodsPrice((long) price);
+            goodsDetail.setGoodsStatus("auction = " +memberId);
             goodsRepository.save(goodsDetail);
+
             return true;
         }  catch (Exception e) {
             e.printStackTrace();
@@ -304,6 +347,7 @@ public class GoodsService {
     // DTO 변환
     private GoodsDetailDto goodsEntityToDto2(GoodsDetail goodsDetail) {
         GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
+        MemberDto memberDto = new MemberDto();
         goodsDetailDto.setGoodsDetailId(goodsDetail.getGoodsDetailId());     //기본키
         goodsDetailDto.setGoodsCategory(goodsDetail.getGoodsCategory());//카테고리
         goodsDetailDto.setGoodsPic(goodsDetail.getGoodsPic());//상품 사진
@@ -313,27 +357,23 @@ public class GoodsService {
         goodsDetailDto.setGoodsPrice(goodsDetail.getGoodsPrice());   // 상품 가격
         goodsDetailDto.setGoodsDeliveryFee(goodsDetail.getGoodsDeliveryFee());// 배달비
         goodsDetailDto.setGoodsStatus(goodsDetail.getGoodsStatus());// 배달비
+        memberDto.setNickName(goodsDetail.getMember().getNickName());
         List<GoodsPurchase> goodsPurchases = goodsDetail.getPurchase();
         List<GoodsPurchaseDto> goodsPurchaseDtos = new ArrayList<>();
-        for (GoodsPurchase goodsPurchase : goodsPurchases) {
-            GoodsPurchaseDto goodsPurchaseDto = new GoodsPurchaseDto();
-
-            Member member = goodsPurchase.getBuyer();
-            if (member != null) {
-                MemberDto memberDto = member.toDto();
-                goodsPurchaseDto.setBuyer(memberDto);
-
+        if (goodsPurchases != null && !goodsPurchases.isEmpty()) {
+            for (GoodsPurchase purchase : goodsPurchases) {
+                GoodsPurchaseDto purchaseDto = new GoodsPurchaseDto();
+                purchaseDto.setId(purchase.getId());
+                purchaseDto.setBuyer(memberDto);
+                purchaseDto.setOption(purchase.getOption());
+                purchaseDto.setQuantity(purchase.getQuantity());
+                purchaseDto.setStatus(purchase.getStatus());
+                purchaseDto.setRequirements(purchase.getRequirements());
+                purchaseDto.setReceiveName(purchase.getReceiveName());
+                purchaseDto.setReceiveAdd(purchase.getReceiveAdd());
+                purchaseDto.setReceiveNumber(purchase.getReceiveNumber());
+                goodsPurchaseDtos.add(purchaseDto);
             }
-
-
-            goodsPurchaseDto.setId(goodsPurchase.getId());
-            goodsPurchaseDto.setGoodsDetailId(goodsDetailDto);
-            goodsPurchaseDto.setOption(goodsPurchase.getOption());
-            goodsPurchaseDto.setQuantity(goodsPurchase.getQuantity());
-            goodsPurchaseDto.setStatus(goodsPurchase.getStatus());
-
-            // 다른 필요한 리뷰 정보 추가
-            goodsPurchaseDtos.add(goodsPurchaseDto);
         }
         goodsDetailDto.setPurchase(goodsPurchaseDtos);
         return goodsDetailDto;

@@ -9,7 +9,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "goodsOption")
-@Getter @Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 // 디테일 옵션

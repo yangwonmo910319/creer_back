@@ -28,7 +28,7 @@ public class PurchaseService {
     private final MemberRepository memberRepository;
     private final PurchaseRepository purchaseRepository;
     private final ModelMapper modelMapper;
-    private GoodsDetailDto goodsDetailDto;
+
     @Autowired
     public PurchaseService(GoodsRepository goodsRepository, MemberRepository memberRepository, PurchaseRepository purchaseRepository, ModelMapper modelMapper) {
         this.goodsRepository = goodsRepository;

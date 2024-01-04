@@ -30,7 +30,7 @@ public  class PurchaseController {
         boolean list = purchaseService.updatePurchase(id,content);
         return ResponseEntity.ok(list);
     }
-    //판매 구매 출력
+    // 구매 목록 출력
     @GetMapping("/buy")
     public ResponseEntity<List<GoodsPurchaseDto>> selectBuyer() {
         List<GoodsPurchaseDto> list = purchaseService.selectBuyer();
