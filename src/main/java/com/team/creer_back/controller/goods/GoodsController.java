@@ -82,7 +82,12 @@ public class GoodsController {
         boolean list = goodsService.updatePrice(id,price);
         return ResponseEntity.ok(list);
     }
-
+    //경배 금액 변경
+    @PostMapping("/auctionPrice2")
+    public ResponseEntity<Boolean> update2(@RequestParam int id,@RequestParam int price) {
+        boolean list = goodsService.updatePrice2(id,price);
+        return ResponseEntity.ok(list);
+    }
 
     // 상품 이미지 등록
     @PostMapping("/new/picture")

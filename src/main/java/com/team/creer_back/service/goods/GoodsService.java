@@ -149,18 +149,45 @@ public class GoodsService {
     public Boolean updatePrice(int id,int price) {
         try{
             Long memberId = getCurrentMemberId();
-            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(() -> new RuntimeException("상품이 없습니다"));
-            goodsDetail.setGoodsPrice((long) price);
-            goodsDetail.setGoodsStatus("auction = " +memberId);
-            goodsRepository.save(goodsDetail);
+            Member member = memberRepository.findById(memberId).orElseThrow(
+                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
+            );
+            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
+                    () -> new RuntimeException("상품이 없습니다"));
 
-            return true;
+            if(price>goodsDetail.getGoodsPrice()){
+                goodsDetail.setGoodsPrice((long) price);
+                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
+                goodsRepository.save(goodsDetail);
+                return true;
+            }else {
+                return false;
+            }
         }  catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+    @Transactional
+    public Boolean updatePrice2(int id,int price) {
+        try{
+            Long memberId = getCurrentMemberId();
+            Member member = memberRepository.findById(memberId).orElseThrow(
+                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
+            );
+            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
+                    () -> new RuntimeException("상품이 없습니다"));
 
+
+                goodsDetail.setGoodsPrice(goodsDetail.getGoodsPrice()+ (long) price);
+                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
+                goodsRepository.save(goodsDetail);
+                return true;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     public GoodsDetailDto getGoods(Long goodsId) {
         GoodsDetail goodsDetail = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
