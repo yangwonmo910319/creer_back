@@ -26,7 +26,12 @@ public class CartController {
         Long list = cartService.addToCart(cartDto);
         return ResponseEntity.ok(list);
     }
-
+    // 경매로 장바구니 추가
+    @PostMapping("/add2/{buyer}")
+    public ResponseEntity<Long> addToCart2(@RequestBody CartDto cartDto ,@PathVariable String buyer){
+        Long list = cartService.addToCart2(cartDto,buyer);
+        return ResponseEntity.ok(list);
+    }
      // 장바구니 목록
     @GetMapping("/list")
     public ResponseEntity<List<CartDto>> getCartItems(@RequestHeader("Authorization") String accessToken) {
