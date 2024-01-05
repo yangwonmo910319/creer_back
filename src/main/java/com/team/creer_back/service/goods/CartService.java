@@ -62,7 +62,6 @@ public class CartService {
     @Transactional
     public Long addToCart2(CartDto cartDto,String buyer) {
         try {
-
             Member member = memberRepository.findByNickName(buyer).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
             GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!")); // 중첩 DTO            log.warn("{}" + goodsDetail);
             Member seller = memberRepository.findById(goodsDetail.getMember().getId()).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
@@ -74,9 +73,8 @@ public class CartService {
                     .quantity(cartDto.getQuantity())
                     .title(cartDto.getTitle())
                     .goodsImg(cartDto.getGoodsImg())
-                    .price(cartDto.getPrice())
+                    .price(goodsDetail.getGoodsPrice())
                     .build();
-
             Cart savedCart = cartRepository.save(cart);
             return savedCart.getCartId();
         } catch (Exception e) {

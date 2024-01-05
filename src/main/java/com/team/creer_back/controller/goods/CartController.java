@@ -37,7 +37,6 @@ public class CartController {
     public ResponseEntity<List<CartDto>> getCartItems(@RequestHeader("Authorization") String accessToken) {
         Long memberId = SecurityUtil.getCurrentMemberId();
         List<CartDto> cartItems = cartService.getCartItems(memberId);
-
         return ResponseEntity.ok(cartItems);
     }
 
