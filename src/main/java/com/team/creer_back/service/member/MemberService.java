@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @Transactional
@@ -98,10 +100,11 @@ public class MemberService {
     // 카카오 회원 가입
     public boolean kakaoSignUp(MemberDto memberDto) {
         try {
+            String uniqueEmail = UUID.randomUUID().toString() + "@kakao.com";
             Member member = Member.builder()
                     .nickName(memberDto.getNickName())
                     .name("카카오")
-                    .email("member@kakao.com")
+                    .email(uniqueEmail)
                     .password("kakaoPassword")
                     .phoneNum("010-0000-0000")
                     .address("kakaoAddress")
