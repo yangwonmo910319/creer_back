@@ -35,7 +35,7 @@ public class CartService {
 
     // 장바구니에 추가
     @Transactional
-    public Long addToCart(CartDto cartDto) {
+    public Long insertCart(CartDto cartDto) {
         try {
             Long buyerId = getCurrentMemberId(); // 구매자
             Member buyer = memberRepository.findById(buyerId).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
@@ -51,16 +51,16 @@ public class CartService {
                     .goodsImg(cartDto.getGoodsImg())
                     .price(cartDto.getPrice())
                     .build();
-
             Cart savedCart = cartRepository.save(cart);
             return savedCart.getCartId();
         } catch (Exception e) {
             throw new RuntimeException("CartService addToCart 에서 오류가 발생했습니다! : ", e);
         }
     }
+
     // 장바구니에 추가
     @Transactional
-    public Long addToCart2(CartDto cartDto,String buyer) {
+    public Long insertCart2(CartDto cartDto,String buyer) {
         try {
             Member member = memberRepository.findByNickName(buyer).orElseThrow(() -> new RuntimeException("구매자 아이디가 없습니다!"));
             GoodsDetail goodsDetail = goodsRepository.findById(cartDto.getGoodsDetailId()).orElseThrow(() -> new RuntimeException("상품 아이디가 존재하지 않습니다!")); // 중첩 DTO            log.warn("{}" + goodsDetail);
@@ -81,7 +81,10 @@ public class CartService {
             throw new RuntimeException("CartService addToCart 에서 오류가 발생했습니다! : ", e);
         }
     }
-    public List<CartDto> getCartItems(Long memberId) {
+
+
+
+    public List<CartDto> selectCartList(Long memberId) {
         if (memberId == null) {
             throw new RuntimeException("회원이 존재하지 않습니다.");
         }
@@ -97,7 +100,7 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    public CartDto select(Long id) {
+    public CartDto selectCart(Long id) {
         Long memberId = getCurrentMemberId();
         if (memberId == null) {
             throw new RuntimeException("회원이 존재하지 않습니다.");
@@ -111,7 +114,7 @@ public class CartService {
 
     // 상품 삭제
     @Transactional
-    public boolean delete(Long id) {
+    public boolean deleteCart(Long id) {
         try {
             cartRepository.deleteById(id);
             return true;

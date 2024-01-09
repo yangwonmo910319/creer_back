@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/Review")
+@RequestMapping("review")
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService; // 생성자를 통해서 값을 참조할 수 있음

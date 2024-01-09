@@ -20,47 +20,49 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("api/goods")
+@RequestMapping("goods")
 @RequiredArgsConstructor
 public class GoodsController {
     private final GoodsService goodsService; // 생성자를 통해서 값을 참조할 수 있음
     private final PictureService pictureService;
     private final PurchaseService purchaseService;
 
-    // 상품 태그 조회
-    @GetMapping("/list/tag")
-    public ResponseEntity<List<GoodsDetailDto>> tagGoods(@RequestParam String keyword) {
-        List<GoodsDetailDto> list = goodsService.tagGoods(keyword);
-        return ResponseEntity.ok(list);
-    }
-
-    // 상품 제목 조회
-    @GetMapping("/list/title")
-    public ResponseEntity<List<GoodsDetailDto>> titleGoods(@RequestParam String keyword) {
-        List<GoodsDetailDto> list = goodsService.TitleGoods(keyword);
-        return ResponseEntity.ok(list);
-    }
-
     // 상품 전체 조회
     @GetMapping("/list")
-    public ResponseEntity<List<GoodsDetailDto>> goodsList() {
-        List<GoodsDetailDto> list = goodsService.getGoodsList();
-        return ResponseEntity.ok(list);
-    }
-
-    // 상품 하나 조회
-    @GetMapping("/list/{id}")
-    public ResponseEntity<GoodsDetailDto> goods(@PathVariable Long id) {
-        GoodsDetailDto list = goodsService.getGoods(id);
+    public ResponseEntity<List<GoodsDetailDto>> selectGoodsList() {
+        List<GoodsDetailDto> list = goodsService.selectGoodsList();
         return ResponseEntity.ok(list);
     }
 
     // 내가 등록한 상품만 조회
     @GetMapping("/Mylist")
-    public ResponseEntity<List<GoodsDetailDto>> getMyGoods() {
-   List<GoodsDetailDto> list = goodsService.getMyGoods();
+    public ResponseEntity<List<GoodsDetailDto>> selectMyGoodsList() {
+        List<GoodsDetailDto> list = goodsService.selectMyGoodsList();
         return ResponseEntity.ok(list);
     }
+
+    // 상품 제목 조회
+    @GetMapping("/list/title")
+    public ResponseEntity<List<GoodsDetailDto>> selectTitleGoods(@RequestParam String keyword) {
+        List<GoodsDetailDto> list = goodsService.selectTitleGoods(keyword);
+        return ResponseEntity.ok(list);
+    }
+
+    // 상품 태그 조회
+    @GetMapping("/list/tag")
+    public ResponseEntity<List<GoodsDetailDto>> selectTagGoods(@RequestParam String keyword) {
+        List<GoodsDetailDto> list = goodsService.selectTagGoods(keyword);
+        return ResponseEntity.ok(list);
+    }
+
+    // 상품 하나 조회
+    @GetMapping("/list/{id}")
+    public ResponseEntity<GoodsDetailDto> selectGoods(@PathVariable Long id) {
+        GoodsDetailDto list = goodsService.selectGoods(id);
+        return ResponseEntity.ok(list);
+    }
+
+
 
     // 상품 등록
     @PostMapping("/new/{auctionTime}")
@@ -72,17 +74,17 @@ public class GoodsController {
     // 경매 전체 조회
     @GetMapping("/auction")
     public ResponseEntity<List<GoodsDetailDto>> auctionList() {
-        List<GoodsDetailDto> list = goodsService.getAuctionList();
+        List<GoodsDetailDto> list = goodsService.selectAuctionList();
         return ResponseEntity.ok(list);
     }
 
-    //경배 금액 변경
+    //경배 금액 변경 (금액 입력시)
     @PostMapping("/auctionPrice")
     public ResponseEntity<Boolean> update(@RequestParam int id,@RequestParam int price) {
         boolean list = goodsService.updatePrice(id,price);
         return ResponseEntity.ok(list);
     }
-    //경배 금액 변경
+    //경배 금액 변경(금액 버튼 클릭시)
     @PostMapping("/auctionPrice2")
     public ResponseEntity<Boolean> update2(@RequestParam int id,@RequestParam int price) {
         boolean list = goodsService.updatePrice2(id,price);

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/picture")
+@RequestMapping("picture")
 @RequiredArgsConstructor
 public class PictureController {
     private final PictureService pictureService; // 생성자를 통해서 값을 참조할 수 있음

@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("api/option")
+@RequestMapping("option")
 @RequiredArgsConstructor
 public  class OptionController {
     private final OptionService optionService; // 생성자를 통해서 값을 참조할 수 있음

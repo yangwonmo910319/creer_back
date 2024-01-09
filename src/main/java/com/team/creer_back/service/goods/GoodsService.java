@@ -53,7 +53,7 @@ public class GoodsService {
         this.modelMapper = modelMapper;
     }
     // 상품 전체 조회
-    public List<GoodsDetailDto> getGoodsList() {
+    public List<GoodsDetailDto> selectGoodsList() {
         List<GoodsDetail> goodsDetails = goodsRepository.findAll();
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {
@@ -62,9 +62,8 @@ public class GoodsService {
         return goodsDetailDtos;
     }
 
-
-    // 내 상품 전체 조회
-    public List<GoodsDetailDto> getMyGoods() {
+    // 내가 등록한 상품만 조회
+    public List<GoodsDetailDto> selectMyGoodsList() {
         Long memberId = getCurrentMemberId();
         List<GoodsDetail> goodsDetails = goodsRepository.findByMemberId(memberId);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
@@ -75,120 +74,30 @@ public class GoodsService {
     }
 
 
-
-    // 구매 목록이 있으면 에러 발생
-//    public List<GoodsDetailDto> MyGoods() {
-//        Long memberId = getCurrentMemberId();
-//        List<GoodsDetail> goodsDetails = goodsRepository.findByMemberId(memberId);
-//
-//        return goodsDetails.stream()
-//                .map(goodsDetail -> {
-//                    GoodsDetailDto goodsDetailDto = modelMapper.map(goodsDetail, GoodsDetailDto.class);
-//
-//                    List<GoodsPurchaseDto> purchasesInfo = goodsDetail.getPurchase().stream()
-//                            .map(goodsPurchase -> {
-//                                GoodsPurchaseDto purchaseDto = modelMapper.map(goodsPurchase, GoodsPurchaseDto.class);
-//                                purchaseDto.setGoodsDetailId(goodsDetailDto);
-//                                return purchaseDto;
-//                            })
-//                            .collect(Collectors.toList());
-//
-//                    goodsDetailDto.setPurchase(purchasesInfo);
-//                    return goodsDetailDto;
-//                })
-//                .collect(Collectors.toList());
-//    }
-
-
-
-    // 상품 필터 조회
-    public List<GoodsDetailDto> tagGoods(String keyword) {
-        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
-        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-        for (GoodsDetail goodsDetail : goodsDetails) {
-            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
-        }
-        return goodsDetailDtos;
-
-    }
-
     // 상품 제목 조회
-    public List<GoodsDetailDto> TitleGoods(String keyword) {
+    public List<GoodsDetailDto> selectTitleGoods(String keyword) {
         List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsTitleContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
         for (GoodsDetail goodsDetail : goodsDetails) {
             goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
         }
         return goodsDetailDtos;
-
     }
 
-    // 상품 삭제
-    @Transactional
-    public boolean deleteGoods(Long id) {
-        try {
-            goodsRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    // 경매 목록 조회
-    public List<GoodsDetailDto> getAuctionList( ) {
-        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsStatusContaining("auction");
+
+    // 상품 태그 조회
+    public List<GoodsDetailDto> selectTagGoods(String keyword) {
+        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsCategoryContaining(keyword);
         List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
-
         for (GoodsDetail goodsDetail : goodsDetails) {
             goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
         }
         return goodsDetailDtos;
-
     }
-    @Transactional
-    public Boolean updatePrice(int id,int price) {
-        try{
-            Long memberId = getCurrentMemberId();
-            Member member = memberRepository.findById(memberId).orElseThrow(
-                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
-            );
-            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
-                    () -> new RuntimeException("상품이 없습니다"));
 
-            if(price>goodsDetail.getGoodsPrice()){
-                goodsDetail.setGoodsPrice((long) price);
-                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
-                goodsRepository.save(goodsDetail);
-                return true;
-            }else {
-                return false;
-            }
-        }  catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    @Transactional
-    public Boolean updatePrice2(int id,int price) {
-        try{
-            Long memberId = getCurrentMemberId();
-            Member member = memberRepository.findById(memberId).orElseThrow(
-                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
-            );
-            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
-                    () -> new RuntimeException("상품이 없습니다"));
-
-
-                goodsDetail.setGoodsPrice(goodsDetail.getGoodsPrice()+ (long) price);
-                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
-                goodsRepository.save(goodsDetail);
-                return true;
-        }  catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    public GoodsDetailDto getGoods(Long goodsId) {
+    // 상품 하나 조회
+    //상품 조회시 리뷰+사진+작성자 정보 함께 출력
+    public GoodsDetailDto selectGoods(Long goodsId) {
         GoodsDetail goodsDetail = goodsRepository.findById(goodsId)
                 .orElseThrow(() -> new RuntimeException("해당 상품이 존재하지 않습니다."));
         GoodsDetailDto goodsDetailDto = new GoodsDetailDto();
@@ -249,8 +158,6 @@ public class GoodsService {
     // 상품 등록
     @Transactional
     public Long insertGoods(GoodsDetailDto goodsDetailDto ,String  auctionTime) {
-
-
         try {
             GoodsDetail goodsDetail = new GoodsDetail();
             Long memberId = getCurrentMemberId();
@@ -286,6 +193,74 @@ public class GoodsService {
     }
 
 
+
+    // 상품 삭제
+    @Transactional
+    public boolean deleteGoods(Long id) {
+        try {
+            goodsRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    // 경매 목록 조회
+    public List<GoodsDetailDto> selectAuctionList( ) {
+        List<GoodsDetail> goodsDetails = goodsRepository.findBygoodsStatusContaining("auction");
+        List<GoodsDetailDto> goodsDetailDtos = new ArrayList<>();
+
+        for (GoodsDetail goodsDetail : goodsDetails) {
+            goodsDetailDtos.add(goodsEntityToDto(goodsDetail));
+        }
+        return goodsDetailDtos;
+
+    }
+    @Transactional
+    public Boolean updatePrice(int id,int price) {
+        try{
+            Long memberId = getCurrentMemberId();
+            Member member = memberRepository.findById(memberId).orElseThrow(
+                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
+            );
+            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
+                    () -> new RuntimeException("상품이 없습니다"));
+
+            if(price>goodsDetail.getGoodsPrice()){
+                goodsDetail.setGoodsPrice((long) price);
+                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
+                goodsRepository.save(goodsDetail);
+                return true;
+            }else {
+                return false;
+            }
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @Transactional
+    public Boolean updatePrice2(int id,int price) {
+        try{
+            Long memberId = getCurrentMemberId();
+            Member member = memberRepository.findById(memberId).orElseThrow(
+                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
+            );
+            GoodsDetail goodsDetail = goodsRepository.findById((long) id).orElseThrow(
+                    () -> new RuntimeException("상품이 없습니다"));
+
+
+                goodsDetail.setGoodsPrice(goodsDetail.getGoodsPrice()+ (long) price);
+                goodsDetail.setGoodsStatus("auction = " +member.getNickName());
+                goodsRepository.save(goodsDetail);
+                return true;
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     //상품 한개 수정
     @Transactional
     public boolean updateGoods(Long id, GoodsDetailDto goodsDetailDto) {
@@ -308,7 +283,6 @@ public class GoodsService {
             goodsDetail.setGoodsDeliveryFee(goodsDetailDto.getGoodsDeliveryFee());
             goodsDetail.setGoodsStatus(goodsDetailDto.getGoodsStatus());
             goodsDetail.setMember(member);
-
             return true;
 
         } catch (Exception e) {
